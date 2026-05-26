@@ -1,0 +1,2474 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cô Thơ Nụ — Side Drawer + Mobile Bottom Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Oswald:wght@400;500;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #f5eedc;
+  --cream-dark: #ede3c8;
+  --paper: #faf6ed;
+  --ink: #1a1208;
+  --ink-mid: #2e2010;
+  --red: #c0180f;
+  --red-dark: #8b1008;
+  --navy: #1a2a4a;
+  --navy-light: #2c4070;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --brown: #5c3a1e;
+  --border-thick: 3px solid var(--ink);
+  --border-thin: 1px solid var(--ink);
+  --border-double: 4px double var(--ink);
+  --border-red: 2px solid var(--red);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  background: var(--cream-dark);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(26,18,8,0.04) 28px, rgba(26,18,8,0.04) 29px);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.masthead {
+  background: var(--paper);
+  border-bottom: var(--border-thick);
+  position: relative;
+}
+
+.masthead-top {
+  background: var(--navy);
+  padding: 5px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.masthead-top-left {
+  font-family: 'Dancing Script', cursive;
+  font-size: 17px;
+  color: var(--cream);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.masthead-top-right {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  color: var(--cream);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.masthead-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0;
+  align-items: center;
+  border-bottom: var(--border-thin);
+}
+
+.masthead-badge {
+  text-align: center;
+  padding-right: 20px;
+  border-right: 2px solid var(--ink);
+  margin-right: 20px;
+}
+
+.badge-top-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 20px;
+  color: var(--red);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.badge-sub-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 18px;
+  color: var(--brown);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.logo-center {
+  text-align: center;
+  padding: 6px 0;
+}
+
+.logo-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--red);
+  letter-spacing: -1px;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 0 rgba(139,16,8,0.3);
+}
+
+.logo-subtitle {
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--navy);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.logo-tagline {
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  color: var(--brown);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.masthead-contact {
+  padding-left: 20px;
+  border-left: 2px solid var(--ink);
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.contact-header-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brown);
+  margin-bottom: 2px;
+}
+
+.contact-header-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.zalo-badge {
+  display: block;
+  width: 180px;
+  text-align: center;
+  background: var(--navy);
+  color: var(--cream);
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-bottom: 5px;
+}
+.zalo-badge:hover { background: var(--red); }
+
+.fb-link {
+  display: block;
+  width: 180px;
+  text-align: center;
+  background: #1877f2;
+  color: white;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 0.15s;
+  margin-top: 5px;
+}
+.fb-link:hover { background: #1565c0; }
+.fb-icon {
+  font-family: Georgia, serif;
+  font-weight: 900;
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* DIVIDER ROW */
+.divider-row {
+  border-top: 3px solid var(--navy);
+  border-bottom: 1px solid var(--navy);
+  padding: 4px 0;
+  text-align: center;
+  background: var(--navy);
+  margin-bottom: 0;
+}
+
+.divider-text {
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  color: var(--cream);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* BANK ROW */
+.bank-strip {
+  background: var(--paper);
+  border-bottom: var(--border-thick);
+}
+
+.bank-strip-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.bank-strip-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brown);
+  padding-top: 2px;
+  white-space: nowrap;
+}
+
+.bank-accounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.bank-item {
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.12s;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  white-space: nowrap;
+}
+.bank-item:hover .bank-num { color: var(--red); }
+.bank-name { font-weight: 700; color: var(--navy); font-size: 11px; letter-spacing: 0.08em; font-family: 'Oswald', sans-serif; }
+.bank-num { color: var(--ink); font-weight: 400; }
+
+/* ===== TOOLBAR ===== */
+.toolbar {
+  background: var(--cream-dark);
+  border-bottom: var(--border-thick);
+  padding: 10px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(26,18,8,0.18);
+}
+
+.toolbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.toolbar-top {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.search-wrap {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.search-wrap input {
+  width: 100%;
+  border: 2px solid var(--ink);
+  padding: 7px 14px;
+  font-size: 14px;
+  font-family: 'Lora', serif;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+  border-radius: 0;
+}
+.search-wrap input:focus { border-color: var(--red); }
+.search-wrap input::placeholder { color: var(--brown); font-style: italic; }
+
+.filter-select {
+  border: 2px solid var(--ink);
+  padding: 7px 28px 7px 10px;
+  font-size: 13.5px;
+  font-family: 'Lora', serif;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%231a1208' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  cursor: pointer;
+  border-radius: 0;
+}
+.filter-select:focus { border-color: var(--red); }
+
+.btn-action {
+  padding: 7px 13px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  font-size: 12px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  color: var(--ink);
+  text-transform: uppercase;
+  transition: all 0.12s;
+  border-radius: 0;
+}
+.btn-action:hover { background: var(--ink); color: var(--cream); }
+
+.btn-reset:hover { background: var(--brown); border-color: var(--brown); color: white; }
+.btn-csv { color: #2e7d32; border-color: #2e7d32; }
+.btn-csv:hover { background: #2e7d32; color: white; }
+.btn-xls { color: #1565c0; border-color: #1565c0; }
+.btn-xls:hover { background: #1565c0; color: white; }
+.btn-print { background: var(--ink); color: var(--cream); }
+.btn-print:hover { background: var(--navy); border-color: var(--navy); }
+
+/* CATEGORY TABS */
+.cat-tabs {
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+  border-top: 2px solid var(--ink);
+}
+
+.cat-tab {
+  padding: 6px 14px;
+  border: none;
+  border-right: 1px solid var(--ink);
+  font-size: 12px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.12s;
+  background: var(--cream-dark);
+  color: var(--ink-mid);
+  white-space: nowrap;
+}
+.cat-tab:hover { background: var(--cream); color: var(--red); }
+.cat-tab.active { background: var(--red); color: white; border-color: var(--red-dark); }
+
+/* ===== MAIN TABLE ===== */
+.main {
+  max-width: 1200px;
+  margin: 18px auto;
+  padding: 0 24px;
+}
+
+.table-card {
+  background: var(--paper);
+  border: var(--border-thick);
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+  overflow: hidden;
+}
+
+.table-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-bottom: var(--border-thick);
+  background: var(--navy);
+}
+
+.table-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table-hint {
+  font-family: 'Lora', serif;
+  font-size: 12.5px;
+  color: rgba(245,238,220,0.75);
+  font-style: italic;
+}
+
+/* Column headers */
+.col-headers {
+  display: grid;
+  grid-template-columns: 38px 90px 50px 1fr 130px 70px 80px 100px 82px;
+  padding: 7px 16px;
+  background: var(--cream-dark);
+  border-bottom: 2px solid var(--ink);
+  font-size: 10.5px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  color: var(--brown);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Product rows */
+.product-row {
+  display: grid;
+  grid-template-columns: 38px 90px 50px 1fr 130px 70px 80px 100px 82px;
+  padding: 0 16px;
+  align-items: center;
+  border-bottom: 1px solid rgba(26,18,8,0.18);
+  min-height: 56px;
+  transition: background 0.1s;
+  cursor: pointer;
+}
+.product-row:last-child { border-bottom: none; }
+.product-row:nth-child(even) { background: rgba(26,18,8,0.025); }
+.product-row:hover { background: rgba(192,24,15,0.07); }
+.product-row.selected { background: rgba(192,24,15,0.12); }
+
+.col { display: flex; align-items: center; padding: 8px 5px; }
+.col-check { justify-content: center; }
+.col-logo { justify-content: center; }
+.col-name { flex-direction: column; align-items: flex-start; }
+.col-price { font-weight: 700; font-size: 15px; font-family: 'Oswald', sans-serif; color: var(--ink); }
+.col-qty { }
+.col-period { flex-direction: column; align-items: flex-start; gap: 1px; }
+.col-total { font-weight: 700; font-size: 15px; font-family: 'Playfair Display', serif; color: var(--red); }
+.col-status { }
+
+.product-checkbox {
+  width: 16px; height: 16px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  accent-color: var(--red);
+  border-radius: 0;
+}
+
+/* Category badge - newspaper label style */
+.cat-badge {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 600;
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border: 1.5px solid currentColor;
+  white-space: nowrap;
+}
+
+.badge-Thiết-kế { color: #6a1b9a; background: #f3e5ff; }
+.badge-Học-tập { color: #1a4080; background: #dde8f8; }
+.badge-Giải-trí { color: #8b1008; background: #fce8e7; }
+.badge-Cloud { color: #004d40; background: #d8f0ec; }
+.badge-AI { color: #4a148c; background: #ede7f6; }
+.badge-VPN { color: #1b5e20; background: #e1f5e2; }
+.badge-Office { color: #7f4f00; background: #fff3cc; }
+.badge-Bảo-mật { color: #880e4f; background: #fce4ec; }
+.badge-Hợp-tác { color: #01579b; background: #e1f0fc; }
+.badge-Key-bản-quyền { color: #3e2723; background: #efebe9; }
+
+.product-logo {
+  width: 32px; height: 32px;
+  border: 1.5px solid var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  background: var(--cream);
+  flex-shrink: 0;
+}
+
+.product-name {
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.product-plan {
+  font-family: 'Lora', serif;
+  font-size: 12px;
+  color: var(--brown);
+  font-style: italic;
+}
+
+.qty-select {
+  border: 1.5px solid var(--ink);
+  padding: 4px 20px 4px 7px;
+  font-size: 13px;
+  font-family: 'Oswald', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='%231a1208' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 5px center;
+  cursor: pointer;
+  width: 56px;
+  border-radius: 0;
+}
+
+.period-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+.period-unit {
+  font-family: 'Lora', serif;
+  font-size: 11px;
+  color: var(--brown);
+  font-style: italic;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  font-size: 10.5px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1.5px solid currentColor;
+}
+
+.status-có-sẵn { color: #1b5e20; background: #e8f5e9; }
+.status-liên-hệ { color: #7f4f00; background: #fff8e1; }
+.status-hết-hàng { color: var(--red); background: #fce8e7; }
+
+/* ===== TOTAL BAR ===== */
+.total-bar {
+  background: var(--paper);
+  border: var(--border-thick);
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+  padding: 16px 24px;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.total-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--brown);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.total-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 50px;
+  font-weight: 900;
+  color: var(--red);
+  line-height: 1;
+  text-shadow: 2px 2px 0 rgba(139,16,8,0.2);
+}
+
+.total-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+}
+
+.total-info-row {
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  color: var(--brown);
+  font-style: italic;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.total-info-count {
+  font-family: 'Oswald', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 12.5px;
+}
+
+.btn-order {
+  background: var(--red);
+  color: var(--cream);
+  border: 2px solid var(--red-dark);
+  padding: 12px 28px;
+  font-size: 14px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 3px 3px 0 var(--red-dark);
+  border-radius: 0;
+}
+.btn-order:hover {
+  background: var(--navy);
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translateY(-1px);
+}
+.btn-order:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--red-dark); }
+
+/* FOOTER SPECIAL BAR */
+.special-bar {
+  background: var(--navy);
+  padding: 8px 24px;
+  max-width: 1200px;
+  margin: 10px auto 24px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border: var(--border-thick);
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.special-label {
+  font-family: 'Dancing Script', cursive;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold-light);
+  white-space: nowrap;
+}
+
+.special-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(245,238,220,0.3);
+}
+
+.special-text {
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  color: var(--cream);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 10px 18px;
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s;
+  pointer-events: none;
+  border: 2px solid var(--gold);
+  box-shadow: 3px 3px 0 var(--brown);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+.empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--brown);
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.btn-admin { color: var(--gold); border-color: var(--gold); }
+.btn-admin:hover { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+/* ===== ADMIN OVERLAY ===== */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,18,8,0.75);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+
+.admin-modal {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  width: 96%;
+  max-width: 960px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 8px 8px 0 var(--brown);
+}
+
+.admin-header {
+  background: var(--navy);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.admin-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.05em;
+}
+
+.admin-close {
+  background: var(--red);
+  border: none;
+  color: white;
+  font-size: 18px;
+  width: 30px; height: 30px;
+  cursor: pointer;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  line-height: 1;
+}
+.admin-close:hover { background: var(--red-dark); }
+
+/* Login screen */
+.admin-login {
+  padding: 40px;
+  text-align: center;
+}
+.admin-login h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.admin-login p {
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  color: var(--brown);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+.admin-pw-wrap {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  max-width: 340px;
+  margin: 0 auto;
+}
+.admin-pw-wrap input {
+  flex: 1;
+  border: 2px solid var(--ink);
+  padding: 10px 14px;
+  font-size: 15px;
+  font-family: 'Lora', serif;
+  background: var(--cream);
+  color: var(--ink);
+  outline: none;
+  border-radius: 0;
+  letter-spacing: 0.2em;
+}
+.admin-pw-wrap input:focus { border-color: var(--red); }
+.btn-login {
+  background: var(--navy);
+  color: var(--cream);
+  border: 2px solid var(--ink);
+  padding: 10px 20px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s;
+}
+.btn-login:hover { background: var(--red); }
+.login-error {
+  margin-top: 12px;
+  font-family: 'Lora', serif;
+  font-size: 13px;
+  color: var(--red);
+  font-style: italic;
+  display: none;
+}
+
+/* Admin body */
+.admin-body {
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+}
+.admin-body.visible { display: flex; }
+
+.admin-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--ink);
+  background: var(--cream-dark);
+  flex-shrink: 0;
+}
+.admin-tab {
+  padding: 10px 20px;
+  border: none;
+  border-right: 1px solid var(--ink);
+  background: transparent;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--brown);
+  transition: all 0.12s;
+}
+.admin-tab:hover { background: var(--cream); color: var(--red); }
+.admin-tab.active { background: var(--red); color: white; }
+
+.admin-pane {
+  display: none;
+  overflow-y: auto;
+  flex: 1;
+}
+.admin-pane.active { display: block; }
+
+/* Product list in admin */
+.admin-product-list {
+  padding: 0;
+}
+
+.admin-row {
+  display: grid;
+  grid-template-columns: 70px 36px 80px 44px 1fr 120px 90px 70px;
+  align-items: center;
+  border-bottom: 1px solid rgba(26,18,8,0.15);
+  padding: 0 14px;
+  min-height: 50px;
+  gap: 0;
+  transition: background 0.1s;
+}
+.admin-row:nth-child(even) { background: rgba(26,18,8,0.02); }
+.admin-row:hover { background: rgba(192,24,15,0.05); }
+
+.admin-col { padding: 6px 4px; display: flex; align-items: center; }
+
+.btn-stock {
+  padding: 4px 8px;
+  border: 1.5px solid currentColor;
+  font-family: 'Oswald', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 0;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.btn-stock.available { color: #1b5e20; }
+.btn-stock.available:hover { background: #1b5e20; color: white; }
+.btn-stock.out { color: var(--red); }
+.btn-stock.out:hover { background: var(--red); color: white; }
+.btn-stock.contact { color: #7f4f00; }
+.btn-stock.contact:hover { background: #7f4f00; color: white; }
+
+.btn-edit, .btn-del {
+  border: 1.5px solid currentColor;
+  background: transparent;
+  padding: 4px 8px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.12s;
+  margin-right: 3px;
+}
+.btn-edit { color: var(--navy); }
+.btn-edit:hover { background: var(--navy); color: white; }
+.btn-del { color: var(--red); }
+.btn-del:hover { background: var(--red); color: white; }
+.sort-controls { display:flex; gap:4px; }
+.btn-sort {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--brown);
+  background: var(--cream);
+  color: var(--brown);
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 0;
+}
+.btn-sort:hover:not(:disabled) { background: var(--brown); color: var(--cream); }
+.btn-sort:disabled { opacity: 0.35; cursor: default; }
+
+/* Add/Edit form */
+.admin-form-section {
+  padding: 20px 24px;
+}
+.admin-form-section h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ink);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.form-field label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brown);
+}
+.form-field input, .form-field select {
+  border: 2px solid var(--ink);
+  padding: 8px 10px;
+  font-size: 13.5px;
+  font-family: 'Lora', serif;
+  background: var(--cream);
+  color: var(--ink);
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.12s;
+}
+.form-field input:focus, .form-field select:focus { border-color: var(--red); }
+.variant-chip { display:inline-block; margin:2px 5px 2px 0; padding:2px 6px; border:1px solid var(--brown); color:var(--brown); font-size:10px; font-family:'Oswald',sans-serif; letter-spacing:.04em; }
+.form-field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%231a1208' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 28px; }
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn-save {
+  background: var(--navy);
+  color: var(--cream);
+  border: 2px solid var(--ink);
+  padding: 9px 24px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s;
+  box-shadow: 2px 2px 0 var(--brown);
+}
+.btn-save:hover { background: var(--red); }
+.btn-cancel-edit {
+  background: transparent;
+  color: var(--brown);
+  border: 2px solid var(--brown);
+  padding: 9px 18px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+}
+.btn-cancel-edit:hover { background: var(--cream-dark); }
+
+.admin-col-hdr {
+  display: grid;
+  grid-template-columns: 70px 36px 80px 44px 1fr 120px 90px 70px;
+  padding: 7px 14px;
+  background: var(--cream-dark);
+  border-bottom: 2px solid var(--ink);
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--brown);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.admin-search {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(26,18,8,0.15);
+  background: var(--cream-dark);
+}
+.admin-search input {
+  width: 100%;
+  border: 2px solid var(--ink);
+  padding: 7px 12px;
+  font-size: 13.5px;
+  font-family: 'Lora', serif;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  border-radius: 0;
+}
+.admin-search input:focus { border-color: var(--red); }
+.admin-search input::placeholder { color: var(--brown); font-style: italic; }
+
+@media (max-width: 900px) {
+  .masthead-main { grid-template-columns: 1fr; }
+  .masthead-badge, .masthead-contact { border: none; text-align: center; align-items: center; }
+  .logo-main { font-size: 48px; }
+  .col-headers, .product-row { grid-template-columns: 34px 80px 44px 1fr 100px 55px 70px 90px 76px; }
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .admin-row, .admin-col-hdr { grid-template-columns: 1fr 80px 80px 60px 70px; }
+}
+
+/* ===== PRODUCT DETAIL SIDE DRAWER ===== */
+:root { --drawer-w: 440px; }
+body { transition: padding-right .32s cubic-bezier(.4,0,.2,1); overflow-x:hidden; }
+body.drawer-open { padding-right: var(--drawer-w); }
+
+.pd-backdrop {
+  display:none; position:fixed; inset:0; background:rgba(26,18,8,0.28); z-index:299;
+}
+.pd-backdrop.open { display:block; }
+
+.pd-drawer {
+  position:fixed; top:0; right:0; bottom:0;
+  width:var(--drawer-w); max-width:100vw;
+  background:var(--paper); border-left:3px solid var(--ink);
+  z-index:300; display:flex; flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .32s cubic-bezier(.4,0,.2,1);
+  box-shadow:-8px 0 32px rgba(26,18,8,0.22);
+}
+.pd-drawer.open { transform:translateX(0); }
+
+.pd-drawer-header {
+  background:var(--navy); padding:14px 18px;
+  display:flex; align-items:flex-start; justify-content:space-between;
+  flex-shrink:0; gap:12px;
+}
+.pd-drawer-hinfo { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
+.pd-d-logo { font-size:28px; width:46px; height:46px; display:flex; align-items:center;
+  justify-content:center; background:rgba(245,238,220,0.12); border:1.5px solid rgba(245,238,220,0.2); flex-shrink:0; }
+.pd-d-name { font-family:'Playfair Display',serif; font-size:18px; font-weight:900; color:var(--cream); line-height:1.15; }
+.pd-d-plan { font-family:'Lora',serif; font-size:12px; font-style:italic; color:rgba(245,238,220,0.7); margin-top:3px; }
+.pd-d-close {
+  width:30px; height:30px; background:var(--red); border:none; color:white;
+  font-size:16px; cursor:pointer; font-family:'Oswald',sans-serif;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .12s;
+}
+.pd-d-close:hover { background:var(--red-dark); }
+
+.pd-d-strip {
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+  padding:8px 18px; background:var(--cream-dark); border-bottom:1.5px solid rgba(26,18,8,0.14);
+}
+.pd-d-pill {
+  display:inline-flex; align-items:center; gap:4px; padding:3px 10px;
+  border:1.5px solid currentColor; font-family:'Oswald',sans-serif;
+  font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+}
+.pd-d-pill-green { color:#1b5e20; background:#e8f5e9; }
+.pd-d-pill-orange { color:#7f4f00; background:#fff8e1; }
+.pd-d-pill-red { color:var(--red); background:#fce8e7; }
+.pd-d-cat { display:inline-block; padding:3px 9px; border:1.5px solid var(--brown);
+  font-family:'Oswald',sans-serif; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--brown); }
+
+.pd-d-nav { display:flex; gap:6px; padding:9px 18px; background:var(--cream-dark); border-bottom:1.5px solid rgba(26,18,8,0.12); }
+.pd-d-nav-btn {
+  flex:1; padding:6px 8px; border:1.5px solid var(--ink);
+  font-family:'Oswald',sans-serif; font-size:10.5px; font-weight:600;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--brown);
+  background:var(--paper); cursor:pointer; transition:all .12s;
+}
+.pd-d-nav-btn:hover { background:var(--ink); color:var(--cream); }
+.pd-d-nav-btn:disabled { opacity:.3; cursor:not-allowed; }
+
+.pd-d-body { overflow-y:auto; flex:1; }
+
+.pd-d-section { padding:14px 18px; border-bottom:1.5px solid rgba(26,18,8,0.1); }
+.pd-d-sec-title {
+  font-family:'Oswald',sans-serif; font-size:10.5px; font-weight:600;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--brown); margin-bottom:9px;
+}
+.pd-d-desc { font-family:'Lora',serif; font-size:13.5px; line-height:1.72; color:var(--ink); }
+
+.pd-d-prices { display:flex; flex-direction:column; gap:7px; }
+.pd-d-price-opt {
+  display:flex; align-items:center; justify-content:space-between;
+  border:2px solid var(--ink); padding:10px 14px; cursor:pointer;
+  background:var(--cream); transition:all .12s; position:relative;
+}
+.pd-d-price-opt:hover { border-color:var(--red); background:#fff8f6; }
+.pd-d-price-opt.sel { border-color:var(--red); background:#fff0ed; }
+.pd-d-price-opt.sel::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--red); }
+.pov-period { font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--brown); }
+.pov-unit { font-family:'Lora',serif; font-size:11px; font-style:italic; color:var(--brown); margin-top:2px; }
+.pov-price { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--red); }
+.pov-save { display:inline-block; margin-top:3px; background:var(--gold); color:white;
+  font-family:'Oswald',sans-serif; font-size:9.5px; font-weight:600; padding:2px 6px; letter-spacing:.05em; }
+
+.pd-d-features { display:flex; flex-direction:column; gap:5px; }
+.pd-d-feat { display:flex; gap:9px; align-items:flex-start; }
+.pd-d-check { color:#1b5e20; font-family:'Oswald',sans-serif; font-weight:700; font-size:13px; flex-shrink:0; margin-top:2px; }
+.pd-d-feat-text { font-family:'Lora',serif; font-size:13px; line-height:1.55; }
+
+.pd-d-note { padding:10px 18px; background:var(--cream-dark); border-bottom:1.5px solid rgba(26,18,8,0.1); }
+.pd-d-note-text { font-family:'Lora',serif; font-size:12px; font-style:italic; color:var(--brown); line-height:1.6; }
+.pd-d-guide-item { display:flex; gap:9px; align-items:flex-start; margin-bottom:6px; }
+.pd-d-guide-num { font-family:'Oswald',sans-serif; font-weight:700; font-size:12px; color:var(--navy);
+  background:var(--cream-dark); border:1.5px solid var(--navy); min-width:22px; height:22px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.pd-d-guide-text { font-family:'Lora',serif; font-size:13px; line-height:1.55; }
+.pd-d-warranty-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:7px; }
+.pd-d-warranty-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.pd-d-warranty-text { font-family:'Lora',serif; font-size:13px; line-height:1.55; }
+.pd-d-warranty-text strong { font-family:'Oswald',sans-serif; font-weight:600; font-size:12px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--navy); display:block; margin-bottom:2px; }
+
+.pd-d-actions {
+  padding:14px 18px; display:flex; flex-direction:column; gap:8px;
+  flex-shrink:0; border-top:2px solid var(--ink); background:var(--paper);
+}
+.pd-d-btn-main {
+  background:var(--red); color:var(--cream); border:2px solid var(--red-dark);
+  padding:11px; font-family:'Oswald',sans-serif; font-size:14px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; cursor:pointer; border-radius:0;
+  box-shadow:3px 3px 0 var(--red-dark); transition:all .12s;
+}
+.pd-d-btn-main:hover { background:var(--red-dark); transform:translateY(-1px); }
+.pd-d-btn-sec {
+  background:transparent; color:var(--navy); border:2px solid var(--navy);
+  padding:9px; font-family:'Oswald',sans-serif; font-size:13px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; cursor:pointer; border-radius:0; transition:all .12s;
+}
+.pd-d-btn-sec:hover { background:var(--navy); color:var(--cream); }
+
+/* active row highlight */
+.product-row.pd-active { background:rgba(192,24,15,0.1) !important; border-left:4px solid var(--red); }
+.product-name { cursor:pointer; transition:color .12s; }
+.product-name:hover { color:var(--red); text-decoration:underline; text-decoration-style:dotted; }
+
+/* ── MOBILE: Bottom Sheet ── */
+@media (max-width: 768px) {
+  :root { --drawer-w: 100vw; }
+  body.drawer-open { padding-right: 0 !important; }
+
+  /* Backdrop darker on mobile */
+  .pd-backdrop.open { background: rgba(26,18,8,0.55); }
+
+  /* Transform drawer into bottom sheet */
+  .pd-drawer {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-left: none;
+    border-top: 3px solid var(--ink);
+    border-radius: 0;
+    transform: translateY(100%);
+    box-shadow: 0 -8px 32px rgba(26,18,8,0.28);
+  }
+  .pd-drawer.open { transform: translateY(0); }
+
+  /* Drag handle pill at top of bottom sheet */
+  .pd-drag-handle {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 4px;
+    background: var(--navy);
+    flex-shrink: 0;
+    cursor: grab;
+    touch-action: none;
+  }
+  .pd-drag-pill {
+    width: 40px; height: 4px;
+    background: rgba(245,238,220,0.4);
+    border-radius: 99px;
+  }
+
+  /* Compact header on mobile */
+  .pd-drawer-header { padding: 10px 16px; }
+  .pd-d-logo { width: 38px; height: 38px; font-size: 22px; }
+  .pd-d-name { font-size: 16px; }
+
+  /* Nav arrows horizontal + bigger tap targets */
+  .pd-d-nav { padding: 8px 14px; }
+  .pd-d-nav-btn { padding: 10px 8px; font-size: 12px; }
+
+  /* Sections slightly more compact */
+  .pd-d-section { padding: 12px 16px; }
+  .pd-d-actions { padding: 12px 16px; gap: 10px; flex-direction: row; }
+  .pd-d-btn-main, .pd-d-btn-sec { flex: 1; padding: 13px 8px; font-size: 13px; }
+
+  /* Price options bigger tap target */
+  .pd-d-price-opt { padding: 13px 14px; }
+  .pov-price { font-size: 22px; }
+
+  /* Features */
+  .pd-d-feat-text { font-size: 14px; }
+
+  /* Hide nav arrows hint text, show only arrows */
+  #pdBtnPrev::after { content: ''; }
+  #pdBtnNext::after { content: ''; }
+
+  /* Product rows — bigger touch targets on mobile */
+  .product-row { min-height: 64px; cursor: pointer; }
+  .product-row:active { background: rgba(192,24,15,0.12); }
+
+  /* Table: simplify columns on small screen */
+  .col-headers { display: none; }
+  .product-row {
+    grid-template-columns: 36px 0 44px 1fr 0 0 0 100px 80px;
+  }
+  .col-badge { display: none; }
+  .col-qty { display: none; }
+  .col-period { display: none; }
+  .col-price { display: none; }
+}
+
+
+
+/* ── Detail content editor ── */
+.detail-item-row {
+  display:flex; gap:6px; align-items:center;
+}
+.detail-item-row input {
+  flex:1; border:2px solid var(--ink); padding:7px 10px;
+  font-family:'Lora',serif; font-size:13px; background:var(--cream);
+  color:var(--ink); outline:none; border-radius:0;
+}
+.detail-item-row input:focus { border-color:var(--red); }
+.detail-item-num {
+  min-width:24px; height:24px; background:var(--navy); color:var(--cream);
+  font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.btn-del-item {
+  width:28px; height:28px; background:var(--red); color:white; border:none;
+  font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:background .12s;
+}
+.btn-del-item:hover { background:var(--red-dark); }
+.warranty-item-group {
+  border:1.5px solid rgba(26,18,8,0.2); padding:10px 12px;
+  background:var(--cream); display:flex; flex-direction:column; gap:6px; position:relative;
+}
+.warranty-item-group .btn-del-item {
+  position:absolute; top:6px; right:6px; width:22px; height:22px; font-size:12px;
+}
+.warranty-row-label {
+  font-family:'Oswald',sans-serif; font-size:9.5px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--brown); margin-bottom:2px;
+}
+.warranty-emoji-pick {
+  display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px;
+}
+.emoji-btn {
+  width:30px; height:30px; border:1.5px solid var(--ink); background:var(--paper);
+  font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all .12s;
+}
+.emoji-btn.picked { border-color:var(--red); background:#fff0ed; }
+.emoji-btn:hover { border-color:var(--red); }
+
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-top">
+    <div class="masthead-top-left">✦ nhanh – gọn – uy tín ✦</div>
+    <div class="masthead-top-right">Chuyên Bán Tài Khoản Số</div>
+  </div>
+
+  <div class="masthead-main">
+    <div class="masthead-badge">
+      <div class="badge-top-text">Ắc-cao</div>
+      <div class="badge-sub-text">Số dzách</div>
+    </div>
+
+    <div class="logo-center">
+      <div class="logo-main">CÔ-THƠ-NỤ</div>
+      <div class="logo-subtitle">✦ chuyên bán tài khoản các loại ✦</div>
+      <div class="logo-tagline">Thơ Nụ kính chào quý khách "xoè váy nhún"</div>
+    </div>
+
+    <div class="masthead-contact">
+      <div class="contact-header-label">Liên Hệ</div>
+      <div class="contact-header-name">Lê Thị Anh Thơ</div>
+      <div class="zalo-badge" onclick="copyText('0389 896 683','Zalo')">Zalo: 0389 896 683</div>
+      <a class="fb-link" href="https://www.facebook.com/thonuxyz" target="_blank" rel="noopener">FB: Lê Thị Anh Thơ</a>
+    </div>
+  </div>
+
+  <!-- BANK STRIP -->
+  <div class="bank-strip">
+    <div class="bank-strip-inner">
+      <div class="bank-strip-label">Thông tin<br>chuyển khoản</div>
+      <div class="bank-accounts">
+        <div class="bank-item" onclick="copyText('0389896683','MoMo')">
+          <span class="bank-name">MoMo:</span>
+          <span class="bank-num">0389896683</span>
+        </div>
+        <div class="bank-item" onclick="copyText('0071000711257','Vietcombank')">
+          <span class="bank-name">Vietcombank:</span>
+          <span class="bank-num">0071000711257</span>
+        </div>
+        <div class="bank-item" onclick="copyText('0942234591','MB Bank')">
+          <span class="bank-name">MB Bank:</span>
+          <span class="bank-num">0942234591</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="toolbar-top">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Tìm nhanh: Netflix, AI, năm, chính chủ, 2TB..." oninput="filterProducts()">
+      </div>
+      <select class="filter-select" id="groupFilter" onchange="filterProducts()">
+        <option value="">Nhóm: Tất cả</option>
+        <option>Thiết kế</option><option>Học tập</option><option>Giải trí</option>
+        <option>Cloud</option><option>AI</option><option>Office</option>
+        <option>VPN</option><option>Bảo mật</option><option>Hợp tác trực tuyến</option><option>Key bản quyền</option>
+      </select>
+      <select class="filter-select" id="statusFilter" onchange="filterProducts()">
+        <option value="">Trạng thái: Tất cả</option>
+        <option>Có sẵn</option><option>Liên hệ</option><option>Hết hàng</option>
+      </select>
+      <button class="btn-action btn-reset" onclick="resetFilters()">Reset</button>
+      <button class="btn-action" onclick="copySelected()">Copy</button>
+      <button class="btn-action btn-csv" onclick="exportCSV()">CSV</button>
+      <button class="btn-action btn-xls" onclick="exportCSV()">XLS</button>
+      <button class="btn-action btn-print" onclick="window.print()">In</button>
+      <button class="btn-action btn-admin" onclick="openAdmin()">⚙ Admin</button>
+    </div>
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" data-cat="" onclick="setCategory(this,'')">Tất cả</button>
+      <button class="cat-tab" data-cat="Học tập" onclick="setCategory(this,'Học tập')">Học tập</button>
+      <button class="cat-tab" data-cat="Giải trí" onclick="setCategory(this,'Giải trí')">Giải trí</button>
+      <button class="cat-tab" data-cat="Cloud" onclick="setCategory(this,'Cloud')">Cloud</button>
+      <button class="cat-tab" data-cat="AI" onclick="setCategory(this,'AI')">AI</button>
+      <button class="cat-tab" data-cat="Office" onclick="setCategory(this,'Office')">Office</button>
+      <button class="cat-tab" data-cat="Key bản quyền" onclick="setCategory(this,'Key bản quyền')">Key bản quyền</button>
+      <button class="cat-tab" data-cat="Thiết kế" onclick="setCategory(this,'Thiết kế')">Thiết kế</button>
+      <button class="cat-tab" data-cat="Hợp tác trực tuyến" onclick="setCategory(this,'Hợp tác trực tuyến')">Hợp tác</button>
+      <button class="cat-tab" data-cat="Bảo mật" onclick="setCategory(this,'Bảo mật')">Bảo mật</button>
+      <button class="cat-tab" data-cat="VPN" onclick="setCategory(this,'VPN')">VPN</button>
+      <button class="cat-tab" data-cat="Có sẵn" onclick="setCategory(this,'Có sẵn')">Có sẵn</button>
+      <button class="cat-tab" data-cat="Theo gói" onclick="setCategory(this,'Theo gói')">Theo gói</button>
+      <button class="cat-tab" data-cat="Liên hệ" onclick="setCategory(this,'Liên hệ')">Liên hệ</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="table-card">
+    <div class="table-header-row">
+      <div class="table-title">✦ Danh Sách Sản Phẩm &amp; Dịch Vụ ✦</div>
+      <div class="table-hint">Tick dòng cần mua để cộng tổng · Click header để sort</div>
+    </div>
+    <div class="col-headers">
+      <div>Chọn</div><div>Nhóm</div><div></div><div>Tên / Gói</div>
+      <div>Đơn giá</div><div>SL</div><div>Kỳ hạn</div><div>Thành tiền</div><div>Trạng thái</div>
+    </div>
+    <div id="productList"></div>
+    <div id="emptyMsg" class="empty" style="display:none">— Không tìm thấy sản phẩm phù hợp —</div>
+  </div>
+
+  <!-- TOTAL -->
+  <div class="total-bar">
+    <div>
+      <div class="total-label">Tổng tiền các gói SP đã chọn</div>
+      <div class="total-amount" id="totalAmount">0đ</div>
+    </div>
+    <div class="total-right">
+      <div class="total-info-row">Tick vào từng dòng để cộng vào tổng. <span class="total-info-count" id="selectedCount">0 dòng</span></div>
+      <div class="total-info-row">Dòng giá khoảng/liên hệ không cộng tự động. <span class="total-info-count" id="totalRows">0 dòng</span></div>
+      <div class="total-info-row">Có thể sửa "Thành tiền" khi đã chốt giá final. <span class="total-info-count" id="visibleCount">0 hiển thị</span></div>
+    </div>
+    <button class="btn-order" onclick="sendOrder()">✦ Gửi Đơn Hàng Cho Shop ✦</button>
+  </div>
+</div>
+
+<!-- SPECIAL FOOTER BAR -->
+<div class="special-bar">
+  <div class="special-label">Đặc biệt</div>
+  <div class="special-divider"></div>
+  <div class="special-text">TẶNG FREE ACC PHÒNG: Premiere, FShare, PicsArt, VscoX, Scribd, SkillShare, StudyPhim… cho khách hàng đã &amp; đang sử dụng dịch vụ</div>
+</div>
+
+
+<!-- PRODUCT DETAIL SIDE DRAWER -->
+<div class="pd-backdrop" id="pdBackdrop" onclick="closePD()"></div>
+<div class="pd-drawer" id="pdDrawer">
+  <div class="pd-drag-handle" id="pdDragHandle">
+    <div class="pd-drag-pill"></div>
+  </div>
+  <div class="pd-drawer-header">
+    <div class="pd-drawer-hinfo">
+      <div class="pd-d-logo" id="pdLogo"></div>
+      <div>
+        <div class="pd-d-name" id="pdName"></div>
+        <div class="pd-d-plan" id="pdPlanSub"></div>
+      </div>
+    </div>
+    <button class="pd-d-close" onclick="closePD()">✕</button>
+  </div>
+
+  <div class="pd-d-strip">
+    <span class="pd-d-pill" id="pdStatus"></span>
+    <span class="pd-d-cat" id="pdCat"></span>
+  </div>
+
+  <div class="pd-d-nav">
+    <button class="pd-d-nav-btn" id="pdBtnPrev" onclick="pdNav(-1)">‹ Trước</button>
+    <button class="pd-d-nav-btn" id="pdBtnNext" onclick="pdNav(1)">Tiếp ›</button>
+  </div>
+
+  <div class="pd-d-body" id="pdDrawerBody">
+    <div class="pd-d-section">
+      <div class="pd-d-sec-title">✦ Mô tả sản phẩm</div>
+      <div class="pd-d-desc" id="pdDesc"></div>
+    </div>
+    <div class="pd-d-section">
+      <div class="pd-d-sec-title">✦ Chọn gói phù hợp</div>
+      <div class="pd-d-prices" id="pdPrices"></div>
+    </div>
+    <div class="pd-d-section">
+      <div class="pd-d-sec-title">✦ Tính năng nổi bật</div>
+      <div class="pd-d-features" id="pdFeatures"></div>
+    </div>
+    <div class="pd-d-section">
+      <div class="pd-d-sec-title">&#10022; H&#432;&#7899;ng d&#7851;n s&#7917; d&#7909;ng</div>
+      <div id="pdGuide"></div>
+    </div>
+    <div class="pd-d-section">
+      <div class="pd-d-sec-title">&#10022; Ch&#7871; &#273;&#7897; b&#7843;o h&#224;nh</div>
+      <div id="pdWarranty"></div>
+    </div>
+    <div class="pd-d-note"><div class="pd-d-note-text" id="pdNote"></div></div>
+  </div>
+
+  <div class="pd-d-actions">
+    <button class="pd-d-btn-main" onclick="pdAddCart()">✦ Thêm vào giỏ</button>
+    <button class="pd-d-btn-sec" onclick="pdContact()">📞 Liên hệ Zalo ngay</button>
+  </div>
+</div>
+
+<!-- ADMIN OVERLAY -->
+<div class="overlay" id="adminOverlay" onclick="overlayClick(event)">
+  <div class="admin-modal" id="adminModal">
+    <div class="admin-header">
+      <div class="admin-title">⚙ Bảng Quản Trị — Cô Thơ Nụ</div>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-login" id="adminLogin">
+      <h2>Khu vực quản trị</h2>
+      <p>Nhập mật khẩu để tiếp tục</p>
+      <div class="admin-pw-wrap">
+        <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="btn-login" onclick="doLogin()">Vào</button>
+      </div>
+      <div class="login-error" id="loginError">❌ Mật khẩu không đúng, thử lại!</div>
+    </div>
+    <div class="admin-body" id="adminBody">
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab(this,'tabProducts')">📋 Danh sách sản phẩm</button>
+        <button class="admin-tab" onclick="switchAdminTab(this,'tabAdd')">➕ Thêm / Sửa sản phẩm</button>
+        <button class="admin-tab" onclick="switchAdminTab(this,'tabDetail')">✏ Nội dung chi tiết</button>
+      </div>
+      <div class="admin-pane active" id="tabProducts">
+        <div class="admin-search">
+          <input type="text" id="adminSearch" placeholder="Tìm nhanh theo tên sản phẩm..." oninput="renderAdminList()">
+        </div>
+        <div class="admin-col-hdr">
+          <div>Sắp xếp</div><div></div><div>Nhóm</div><div></div><div>Tên / Gói &amp; Giá</div>
+          <div>Trạng thái nhanh</div><div></div><div>Xóa</div>
+        </div>
+        <div id="adminProductList" class="admin-product-list"></div>
+      </div>
+      <div class="admin-pane" id="tabAdd">
+        <div class="admin-form-section">
+          <h3 id="formTitle">➕ Thêm sản phẩm mới</h3>
+          <input type="hidden" id="editId" value="">
+          <div class="form-grid">
+            <div class="form-field"><label>Tên sản phẩm *</label><input type="text" id="fName" placeholder="VD: Netflix, ChatGPT..."></div>
+            <div class="form-field"><label>Gói / Chi tiết</label><input type="text" id="fPlan" placeholder="VD: Gói Pro, Chính chủ..."></div>
+            <div class="form-field"><label>Logo (emoji)</label><input type="text" id="fLogo" placeholder="VD: 🎬 🤖 ☁️"></div>
+            <div class="form-field"><label>Nhóm danh mục *</label>
+              <select id="fCat">
+                <option value="">-- Chọn nhóm --</option>
+                <option>Thiết kế</option><option>Học tập</option><option>Giải trí</option>
+                <option>Cloud</option><option>AI</option><option>Office</option>
+                <option>VPN</option><option>Bảo mật</option><option>Hợp tác trực tuyến</option><option>Key bản quyền</option>
+              </select>
+            </div>
+            <div class="form-field"><label>Đơn giá (đồng) *</label><input type="number" id="fPrice" placeholder="VD: 350000"></div>
+            <div class="form-field"><label>Kỳ hạn</label>
+              <select id="fPeriod">
+                <option value="">-- Không có --</option>
+                <option>Tháng</option><option>Năm</option><option>6 Tháng</option>
+                <option>3 Tháng</option><option>2 Tháng</option><option>Từ</option>
+              </select>
+            </div>
+            <div class="form-field"><label>Đơn vị</label>
+              <select id="fUnit"><option>gói</option><option>tài khoản</option><option>slot</option><option>key</option><option>thiết bị</option><option>workspace</option></select>
+            </div>
+            <div class="form-field"><label>Trạng thái</label>
+              <select id="fStatus"><option>Có sẵn</option><option>Liên hệ</option><option>Hết hàng</option></select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-save" onclick="saveProduct()">💾 Lưu sản phẩm</button>
+            <button class="btn-cancel-edit" onclick="cancelEdit()">Hủy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: DETAIL CONTENT EDITOR -->
+      <div class="admin-pane" id="tabDetail">
+        <div class="admin-form-section">
+          <h3>✏ Sửa nội dung chi tiết sản phẩm</h3>
+
+          <!-- Step 1: pick product -->
+          <div class="form-field" style="margin-bottom:16px;">
+            <label>Chọn sản phẩm cần sửa</label>
+            <select id="detailPickProduct" onchange="loadDetailForm(this.value)" style="width:100%;">
+              <option value="">-- Chọn sản phẩm --</option>
+            </select>
+          </div>
+
+          <!-- Form fields (hidden until product picked) -->
+          <div id="detailFormFields" style="display:none;">
+            <input type="hidden" id="detailEditId">
+
+            <div class="form-field" style="margin-bottom:14px;">
+              <label>Mô tả sản phẩm</label>
+              <textarea id="dDesc" rows="4" placeholder="Mô tả ngắn về sản phẩm, điểm nổi bật..." style="width:100%;border:2px solid var(--ink);padding:9px 12px;font-family:'Lora',serif;font-size:13.5px;background:var(--cream);color:var(--ink);outline:none;resize:vertical;border-radius:0;line-height:1.6;"></textarea>
+            </div>
+
+            <div class="form-field" style="margin-bottom:14px;">
+              <label style="display:flex;align-items:center;justify-content:space-between;">
+                Tính năng nổi bật
+                <button onclick="addDetailItem('dFeatures')" style="background:var(--navy);color:var(--cream);border:none;padding:3px 10px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;cursor:pointer;">+ Thêm dòng</button>
+              </label>
+              <div id="dFeatures" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;"></div>
+            </div>
+
+            <div class="form-field" style="margin-bottom:14px;">
+              <label style="display:flex;align-items:center;justify-content:space-between;">
+                Hướng dẫn sử dụng
+                <button onclick="addDetailItem('dGuide')" style="background:var(--navy);color:var(--cream);border:none;padding:3px 10px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;cursor:pointer;">+ Thêm bước</button>
+              </label>
+              <div id="dGuide" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;"></div>
+            </div>
+
+            <div class="form-field" style="margin-bottom:14px;">
+              <label style="display:flex;align-items:center;justify-content:space-between;">
+                Chế độ bảo hành
+                <button onclick="addWarrantyItem()" style="background:var(--navy);color:var(--cream);border:none;padding:3px 10px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;cursor:pointer;">+ Thêm mục</button>
+              </label>
+              <div id="dWarranty" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;"></div>
+            </div>
+
+            <div class="form-field" style="margin-bottom:18px;">
+              <label>Ghi chú / Lưu ý</label>
+              <textarea id="dNote" rows="2" placeholder="VD: ✦ Kích hoạt trong 15 phút sau thanh toán..." style="width:100%;border:2px solid var(--ink);padding:9px 12px;font-family:'Lora',serif;font-size:13px;background:var(--cream);color:var(--ink);outline:none;resize:vertical;border-radius:0;line-height:1.6;font-style:italic;"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn-save" onclick="saveDetailContent()">💾 Lưu nội dung chi tiết</button>
+              <button class="btn-cancel-edit" onclick="resetDetailForm()">Hủy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ADMIN_PASSWORD = 'thonu2024';
+let adminUnlocked = false;
+
+const DEFAULT_PRODUCTS = [
+  {id:1,cat:'Thiết kế',logo:'🎨',name:'Canva Pro',plan:'Gói Pro',price:30000,period:'Tháng',unit:'gói',status:'Có sẵn'},
+  {id:2,cat:'Thiết kế',logo:'🎨',name:'Canva Pro',plan:'Gói Pro',price:200000,period:'Năm',unit:'gói',status:'Có sẵn'},
+  {id:3,cat:'Thiết kế',logo:'✂️',name:'CapCut',plan:'Chính chủ',price:790000,period:'Năm',unit:'gói',status:'Có sẵn'},
+  {id:4,cat:'Thiết kế',logo:'🖼️',name:'Adobe Creative Cloud',plan:'Full App',price:990000,period:'Năm',unit:'gói',status:'Có sẵn'},
+  {id:5,cat:'Thiết kế',logo:'🖌️',name:'Figma Pro',plan:'Gói Pro',price:180000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:6,cat:'AI',logo:'🤖',name:'ChatGPT Plus',plan:'Chính chủ · GPT-4o',price:390000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:7,cat:'AI',logo:'✨',name:'Claude Pro',plan:'Sonnet + Opus',price:380000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:8,cat:'AI',logo:'🌟',name:'Gemini Advanced',plan:'Google One AI',price:280000,period:'Tháng',unit:'gói',status:'Có sẵn'},
+  {id:9,cat:'AI',logo:'🎯',name:'Midjourney',plan:'Basic Plan',price:280000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:10,cat:'AI',logo:'🔮',name:'Grok AI Super',plan:'Super',price:150000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:11,cat:'Giải trí',logo:'🎬',name:'Netflix',plan:'Premium 4K',price:80000,period:'Tháng',unit:'slot',status:'Có sẵn'},
+  {id:12,cat:'Giải trí',logo:'🎵',name:'Spotify Premium',plan:'Chính chủ',price:190000,period:'6 Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:13,cat:'Giải trí',logo:'🎵',name:'Spotify Premium',plan:'Chính chủ',price:390000,period:'Năm',unit:'tài khoản',status:'Có sẵn'},
+  {id:14,cat:'Giải trí',logo:'▶️',name:'YouTube Premium',plan:'Individual',price:250000,period:'6 Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:15,cat:'Giải trí',logo:'▶️',name:'YouTube Premium',plan:'Individual',price:450000,period:'Năm',unit:'tài khoản',status:'Có sẵn'},
+  {id:16,cat:'Giải trí',logo:'📺',name:'VieON VIP / HBO / K+',plan:'All Access',price:150000,period:'Từ',unit:'gói',status:'Liên hệ'},
+  {id:17,cat:'Giải trí',logo:'🎥',name:'ClipTV',plan:'Full 4 Thiết Bị',price:200000,period:'Năm',unit:'gói',status:'Có sẵn'},
+  {id:18,cat:'Học tập',logo:'📚',name:'Duolingo Plus',plan:'Học đủ thứ tiếng',price:250000,period:'Năm',unit:'tài khoản',status:'Có sẵn'},
+  {id:19,cat:'Học tập',logo:'📝',name:'Grammarly Premium',plan:'Pro',price:450000,period:'Năm',unit:'tài khoản',status:'Có sẵn'},
+  {id:20,cat:'Học tập',logo:'🌳',name:'Team Treehouse',plan:'Full Access',price:299000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:21,cat:'Học tập',logo:'🔗',name:'Lynda / LinkedIn L.',plan:'Premium',price:300000,period:'Năm',unit:'tài khoản',status:'Có sẵn'},
+  {id:22,cat:'Học tập',logo:'🃏',name:'Quizlet Plus',plan:'Plus',price:30000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:23,cat:'Học tập',logo:'🃏',name:'Quizlet Plus',plan:'Plus',price:370000,period:'Năm',unit:'tài khoản',status:'Có sẵn'},
+  {id:24,cat:'Học tập',logo:'💻',name:'DataCamp Premium',plan:'Premium',price:190000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:25,cat:'Học tập',logo:'📖',name:'MYK+',plan:'Full Access',price:290000,period:'3 Tháng',unit:'gói',status:'Có sẵn'},
+  {id:26,cat:'Office',logo:'💼',name:'Microsoft 365',plan:'5 Thiết Bị',price:299000,period:'',unit:'gói',status:'Có sẵn'},
+  {id:27,cat:'Office',logo:'💾',name:'Office 365 + OneDrive',plan:'1TB OneDrive',price:290000,period:'Năm',unit:'gói',status:'Có sẵn'},
+  {id:28,cat:'Cloud',logo:'☁️',name:'Google One / Gemini',plan:'200GB – 2TB',price:200000,period:'Từ',unit:'gói',status:'Liên hệ'},
+  {id:29,cat:'Cloud',logo:'📦',name:'Dropbox',plan:'2TB',price:990000,period:'Năm',unit:'tài khoản',status:'Có sẵn'},
+  {id:30,cat:'VPN',logo:'🔒',name:'NordVPN',plan:'Standard',price:85000,period:'Tháng',unit:'gói',status:'Có sẵn'},
+  {id:31,cat:'VPN',logo:'🔐',name:'ExpressVPN',plan:'1 Thiết Bị',price:110000,period:'Tháng',unit:'gói',status:'Liên hệ'},
+  {id:32,cat:'VPN',logo:'🦈',name:'Surfshark',plan:'Unlimited',price:75000,period:'Tháng',unit:'gói',status:'Có sẵn'},
+  {id:33,cat:'VPN',logo:'🔓',name:'HMA VPN',plan:'Unlimited',price:80000,period:'Tháng',unit:'gói',status:'Liên hệ'},
+  {id:34,cat:'Hợp tác trực tuyến',logo:'📹',name:'Zoom Pro',plan:'Pro',price:190000,period:'Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:35,cat:'Hợp tác trực tuyến',logo:'📹',name:'Zoom Pro',plan:'Pro',price:330000,period:'2 Tháng',unit:'tài khoản',status:'Có sẵn'},
+  {id:36,cat:'Bảo mật',logo:'🛡️',name:'Kaspersky Premium',plan:'1 Thiết Bị',price:190000,period:'Năm',unit:'thiết bị',status:'Có sẵn'},
+  {id:37,cat:'Key bản quyền',logo:'🪟',name:'Key Windows 10 Pro',plan:'Bản quyền',price:250000,period:'',unit:'key',status:'Có sẵn'},
+  {id:38,cat:'Key bản quyền',logo:'📊',name:'Key Project 2019 Pro+',plan:'Bản quyền',price:300000,period:'Năm',unit:'key',status:'Có sẵn'},
+];
+
+function loadProducts(){
+  try{ const s=localStorage.getItem('ctn_products'); if(s) return JSON.parse(s); }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+}
+function saveProductsLS(){ try{localStorage.setItem('ctn_products',JSON.stringify(PRODUCTS));}catch(e){} }
+
+let PRODUCTS=loadProducts();
+let quantities={}, selectedIds=new Set(), selectedVariants={}, activeCat='', nextId=0;
+function recalcNextId(){ nextId=PRODUCTS.length?Math.max(...PRODUCTS.map(p=>p.id))+1:1; }
+recalcNextId();
+PRODUCTS.forEach(p=>{quantities[p.id]=1; selectedVariants[p.id]=p.id;});
+
+function variantKey(p){ return [p.cat||'',p.name||''].join('||').toLowerCase(); }
+function getProductVariants(p){ return PRODUCTS.filter(x=>variantKey(x)===variantKey(p)); }
+function ensureProductOrder(){
+  PRODUCTS.forEach((p,i)=>{ if(typeof p.order!=='number') p.order=i; });
+}
+ensureProductOrder();
+function productOrder(p){
+  const variants=getProductVariants(p);
+  const orders=variants.map(v=>typeof v.order==='number'?v.order:PRODUCTS.indexOf(v)).filter(n=>n>=0);
+  return orders.length?Math.min(...orders):PRODUCTS.indexOf(p);
+}
+function displayStatusWeight(p){
+  return groupStatus(getProductVariants(p))==='Hết hàng'?1:0;
+}
+function sortProductsForDisplay(products){
+  return [...products].sort((a,b)=>{
+    const statusDiff=displayStatusWeight(a)-displayStatusWeight(b);
+    if(statusDiff) return statusDiff;
+    return productOrder(a)-productOrder(b);
+  });
+}
+function getDisplayProducts(products){
+  const seen=new Set(), out=[];
+  sortProductsForDisplay(products).forEach(p=>{ const key=variantKey(p); if(!seen.has(key)){seen.add(key); out.push(p);} });
+  return out;
+}
+function variantLabel(v){ return (v.plan||'Gói')+(v.period?' - '+v.period:''); }
+function getChosenVariant(p){
+  if(!p) return null;
+  const variants=getProductVariants(p);
+  return variants.find(v=>v.id===selectedVariants[p.id])||variants[0]||p;
+}
+function priceSummary(variants){
+  const prices=variants.map(v=>v.price).filter(Boolean);
+  if(!prices.length) return 'Liên hệ';
+  const min=Math.min(...prices), max=Math.max(...prices);
+  return min===max?fmtPrice(min):'Từ '+fmtPrice(min);
+}
+function groupStatus(variants){
+  return variants.some(v=>v.status==='Có sẵn')?'Có sẵn':(variants.some(v=>v.status==='Liên hệ')?'Liên hệ':'Hết hàng');
+}
+PRODUCTS.forEach(p=>{selectedVariants[p.id]=p.id;});
+
+function catBadgeClass(cat){ return 'badge-'+cat.replace(/[\s\/]+/g,'-'); }
+function statusClass(s){ return s==='Có sẵn'?'status-có-sẵn':s==='Hết hàng'?'status-hết-hàng':'status-liên-hệ'; }
+function fmtPrice(n){ return n.toLocaleString('vi-VN')+'đ'; }
+
+function renderRows(products) {
+  const list=document.getElementById('productList');
+  const empty=document.getElementById('emptyMsg');
+  const displayProducts=getDisplayProducts(products);
+  if(!displayProducts.length){list.innerHTML='';empty.style.display='block';updateTotal(displayProducts);return;}
+  empty.style.display='none';
+  list.innerHTML=displayProducts.map(p=>{
+    const variants=getProductVariants(p);
+    const chosen=getChosenVariant(p);
+    const qty=quantities[p.id]||1;
+    const checked=selectedIds.has(p.id)?'checked':'';
+    const selClass=selectedIds.has(p.id)?' selected':'';
+    const qtyOpts=[1,2,3,4,5,6,7,8,9,10].map(n=>`<option ${n===qty?'selected':''}>${n}</option>`).join('');
+    const variantOpts=variants.map(v=>`<option value="${v.id}" ${v.id===chosen.id?'selected':''}>${variantLabel(v)} - ${fmtPrice(v.price)}</option>`).join('');
+    const periodStr=`<div class="period-label">${variants.length} gói</div><div class="period-unit">${variants.map(v=>v.period||v.plan).filter(Boolean).join(', ')}</div>`;
+    return `<div class="product-row${selClass}" id="pdrow-${p.id}" onclick="openDetail(event,${p.id})">
+      <div class="col col-check"><input type="checkbox" class="product-checkbox" ${checked} onclick="event.stopPropagation();toggleCheck(${p.id})" id="chk-${p.id}"></div>
+      <div class="col col-badge"><span class="cat-badge ${catBadgeClass(p.cat)}">${p.cat}</span></div>
+      <div class="col col-logo"><div class="product-logo">${p.logo}</div></div>
+      <div class="col col-name"><div class="product-name">${p.name}</div><div class="product-plan">${variants.map(v=>`<span class="variant-chip">${variantLabel(v)}: ${fmtPrice(v.price)}</span>`).join('')}</div></div>
+      <div class="col col-price">${priceSummary(variants)}</div>
+      <div class="col col-qty"><select class="qty-select" onclick="event.stopPropagation()" onchange="setQty(${p.id},this.value)">${qtyOpts}</select></div>
+      <div class="col col-period"><select class="qty-select" onclick="event.stopPropagation()" onchange="setVariant(${p.id},this.value)">${variantOpts}</select>${periodStr}</div>
+      <div class="col col-total" id="total-${p.id}">${fmtPrice(chosen.price*qty)}</div>
+      <div class="col col-status"><span class="status-badge ${statusClass(groupStatus(variants))}">${groupStatus(variants)}</span></div>
+    </div>`;
+  }).join('');
+  updateTotal(displayProducts);
+}
+
+function getFiltered(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const group=document.getElementById('groupFilter').value;
+  const status=document.getElementById('statusFilter').value;
+  return PRODUCTS.filter(p=>{
+    const matchQ=!q||p.name.toLowerCase().includes(q)||p.plan.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q);
+    const matchG=!group||p.cat===group;
+    const matchS=!status||p.status===status;
+    const matchC=!activeCat||p.cat===activeCat||p.status===activeCat||(activeCat==='Theo gói'&&p.unit==='gói')||(activeCat==='Liên hệ'&&p.status==='Liên hệ')||(activeCat==='Có sẵn'&&p.status==='Có sẵn');
+    return matchQ&&matchG&&matchS&&matchC;
+  });
+}
+function filterProducts(){ renderRows(getFiltered()); }
+function setCategory(el,cat){
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active'); activeCat=cat; filterProducts();
+}
+function toggleRow(e,id){ if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT') return; toggleCheck(id); }
+function toggleCheck(id){
+  if(selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id);
+  const row=document.getElementById('pdrow-'+id); const chk=document.getElementById('chk-'+id);
+  if(row) row.classList.toggle('selected',selectedIds.has(id));
+  if(chk) chk.checked=selectedIds.has(id);
+  updateTotal(getFiltered());
+}
+function setQty(id,val) {
+  quantities[id]=parseInt(val);
+  const p=PRODUCTS.find(x=>x.id===id);
+  const v=getChosenVariant(p);
+  if(p&&v){const el=document.getElementById('total-'+id);if(el) el.textContent=fmtPrice(v.price*quantities[id]);}
+  updateTotal(getDisplayProducts(getFiltered()));
+}
+function setVariant(id,val) {
+  selectedVariants[id]=parseInt(val);
+  setQty(id, quantities[id]||1);
+}
+function updateTotal(visible) {
+  let sum=0;
+  selectedIds.forEach(id=>{
+    const p=PRODUCTS.find(x=>x.id===id);
+    const v=getChosenVariant(p);
+    if(p&&v&&v.status!=='Liên hệ') sum+=v.price*(quantities[id]||1);
+  });
+  document.getElementById('totalAmount').textContent=fmtPrice(sum);
+  document.getElementById('selectedCount').textContent=selectedIds.size+' dòng';
+  document.getElementById('totalRows').textContent=getDisplayProducts(PRODUCTS).length+' dòng';
+  document.getElementById('visibleCount').textContent=visible.length+' hiển thị';
+}
+function resetFilters(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('groupFilter').value='';
+  document.getElementById('statusFilter').value='';
+  activeCat=''; selectedIds.clear(); quantities={};
+  PRODUCTS.forEach(p=>{quantities[p.id]=1;});
+  document.querySelectorAll('.cat-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  
+  filterProducts();
+}
+
+function persistOrder(){
+  PRODUCTS.forEach((p,i)=>{ p.order=i; });
+  saveProductsLS();
+}
+
+function copyText(num,label){ navigator.clipboard.writeText(num).catch(()=>{}); showToast('✦ Đã copy '+label+': '+num); }
+function copySelected() {
+  const rows=[...selectedIds].map(id=>{
+    const p=PRODUCTS.find(x=>x.id===id);
+    const v=getChosenVariant(p);
+    if(!p||!v) return '';
+    return `${p.name} - ${variantLabel(v)}: ${fmtPrice(v.price*quantities[id])} (x${quantities[id]})`;
+  }).filter(Boolean).join('\n');
+  navigator.clipboard.writeText(rows||'Chưa chọn sản phẩm nào').catch(()=>{});
+  showToast('✦ Đã copy danh sách đã chọn!');
+}
+function exportCSV(){
+  const filtered=getFiltered();
+  const rows=[['Nhóm','Tên','Gói','Đơn giá','SL','Kỳ hạn','Thành tiền','Trạng thái']];
+  getDisplayProducts(filtered).forEach(p=>{getProductVariants(p).forEach(v=>rows.push([p.cat,p.name,v.plan,v.price,quantities[p.id]||1,v.period,v.price*(quantities[p.id]||1),v.status]));});
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='cothonu.csv'; a.click();
+  showToast('✦ Đã xuất file CSV!');
+}
+function sendOrder() {
+  if(!selectedIds.size){showToast('⚠ Vui lòng chọn ít nhất 1 sản phẩm!');return;}
+  const items=[...selectedIds].map(id=>{
+    const p=PRODUCTS.find(x=>x.id===id);
+    const v=getChosenVariant(p);
+    if(!p||!v) return '';
+    return `• ${p.name} (${variantLabel(v)}) x${quantities[id]} = ${fmtPrice(v.price*quantities[id])}`;
+  }).filter(Boolean).join('\n');
+  let sum=0;
+  selectedIds.forEach(id=>{
+    const p=PRODUCTS.find(x=>x.id===id);
+    const v=getChosenVariant(p);
+    if(p&&v&&v.status!=='Liên hệ') sum+=v.price*(quantities[id]||1);
+  });
+  const msg=`Chào shop Cô Thơ Nụ!\nEm muốn đặt:\n${items}\nTổng: ${fmtPrice(sum)}\nSĐT liên hệ: `;
+  navigator.clipboard.writeText(msg).catch(()=>{});
+  showToast('✦ Đã copy đơn! Gửi Zalo: 0389 896 683');
+}
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ====== ADMIN ====== */
+function openAdmin(){
+  document.getElementById('adminOverlay').classList.add('open');
+  if(adminUnlocked){
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminBody').classList.add('visible');
+    renderAdminList(); populateDetailPicker();
+  } else {
+    document.getElementById('adminLogin').style.display='block';
+    document.getElementById('adminBody').classList.remove('visible');
+    document.getElementById('pwInput').value='';
+    document.getElementById('loginError').style.display='none';
+    setTimeout(()=>document.getElementById('pwInput').focus(),100);
+  }
+}
+function closeAdmin(){ document.getElementById('adminOverlay').classList.remove('open'); }
+function overlayClick(e){ if(e.target===document.getElementById('adminOverlay')) closeAdmin(); }
+
+function doLogin(){
+  const pw=document.getElementById('pwInput').value;
+  if(pw===ADMIN_PASSWORD){
+    adminUnlocked=true;
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminBody').classList.add('visible');
+    renderAdminList(); populateDetailPicker();
+  } else {
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function switchAdminTab(el,paneId){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.admin-pane').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(paneId).classList.add('active');
+}
+
+function renderAdminList(){
+  const q=(document.getElementById('adminSearch').value||'').toLowerCase();
+  const filtered=sortProductsForDisplay(PRODUCTS.filter(p=>!q||p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)||p.plan.toLowerCase().includes(q)));
+  const container=document.getElementById('adminProductList');
+  container.innerHTML=filtered.map((p,visibleIndex)=>{
+    const realIndex=PRODUCTS.findIndex(x=>x.id===p.id);
+    const mkBtn=(s,label,cls)=>`<button class="btn-stock ${cls}" style="opacity:${p.status===s?'1':'0.4'};${p.status===s?'font-weight:800':''};" onclick="quickStatus(${p.id},'${s}')">${label}</button>`;
+    return `<div class="admin-row">
+      <div class="admin-col sort-controls">
+        <button class="btn-sort" onclick="moveProduct(${p.id},-1)" ${realIndex<=0?'disabled':''}>↑</button>
+        <button class="btn-sort" onclick="moveProduct(${p.id},1)" ${realIndex>=PRODUCTS.length-1?'disabled':''}>↓</button>
+      </div>
+      <div class="admin-col" style="font-size:20px">${p.logo}</div>
+      <div class="admin-col"><span class="cat-badge ${catBadgeClass(p.cat)}" style="font-size:9px;padding:2px 5px">${p.cat}</span></div>
+      <div class="admin-col"></div>
+      <div class="admin-col" style="flex-direction:column;align-items:flex-start;gap:2px">
+        <span style="font-size:13.5px;font-family:'Lora',serif;font-weight:700;color:var(--ink)">${p.name}</span>
+        <span style="font-size:11.5px;font-family:'Lora',serif;font-style:italic;color:var(--brown)">${p.plan} · ${fmtPrice(p.price)}${p.period?'/'+p.period:''}</span>
+      </div>
+      <div class="admin-col" style="gap:4px;flex-wrap:wrap">
+        ${mkBtn('Có sẵn','✓ Có sẵn','available')}
+        ${mkBtn('Liên hệ','? Liên hệ','contact')}
+        ${mkBtn('Hết hàng','✗ Hết hàng','out')}
+      </div>
+      <div class="admin-col"><button class="btn-edit" onclick="editProduct(${p.id})">✏ Sửa</button></div>
+      <div class="admin-col"><button class="btn-del" onclick="deleteProduct(${p.id})">🗑 Xóa</button></div>
+    </div>`;
+  }).join('');
+}
+
+function moveProduct(id,dir){
+  const idx=PRODUCTS.findIndex(p=>p.id===id);
+  if(idx<0) return;
+  const target=idx+dir;
+  if(target<0||target>=PRODUCTS.length) return;
+  const [item]=PRODUCTS.splice(idx,1);
+  PRODUCTS.splice(target,0,item);
+  persistOrder();
+  renderAdminList();
+  filterProducts();
+  populateDetailPicker();
+  showToast('✦ Đã đổi vị trí sản phẩm');
+}
+
+function quickStatus(id,newStatus){
+  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
+  p.status=newStatus; persistOrder(); renderAdminList(); filterProducts();
+  showToast('✦ "'+p.name+'" → '+newStatus);
+}
+function deleteProduct(id){
+  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
+  if(!confirm('Xóa sản phẩm "'+p.name+' - '+p.plan+'"?')) return;
+  PRODUCTS=PRODUCTS.filter(x=>x.id!==id);
+  selectedIds.delete(id); delete quantities[id];
+  persistOrder(); renderAdminList(); filterProducts(); populateDetailPicker();
+  showToast('✦ Đã xóa "'+p.name+'"');
+}
+function editProduct(id){
+  const p=PRODUCTS.find(x=>x.id===id); if(!p) return;
+  document.getElementById('editId').value=id;
+  document.getElementById('fName').value=p.name;
+  document.getElementById('fPlan').value=p.plan;
+  document.getElementById('fLogo').value=p.logo;
+  document.getElementById('fCat').value=p.cat;
+  document.getElementById('fPrice').value=p.price;
+  document.getElementById('fPeriod').value=p.period||'';
+  document.getElementById('fUnit').value=p.unit;
+  document.getElementById('fStatus').value=p.status;
+  document.getElementById('formTitle').textContent='✏ Sửa: '+p.name;
+  switchAdminTab(document.querySelectorAll('.admin-tab')[1],'tabAdd');
+}
+function cancelEdit(){
+  document.getElementById('editId').value='';
+  document.getElementById('formTitle').textContent='➕ Thêm sản phẩm mới';
+  ['fName','fPlan','fLogo','fPrice'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fCat').value='';
+  document.getElementById('fPeriod').value='';
+  document.getElementById('fUnit').value='gói';
+  document.getElementById('fStatus').value='Có sẵn';
+}
+function saveProduct(){
+  const name=document.getElementById('fName').value.trim();
+  const cat=document.getElementById('fCat').value;
+  const price=parseInt(document.getElementById('fPrice').value)||0;
+  if(!name){ showToast('⚠ Vui lòng nhập tên sản phẩm!'); return; }
+  if(!cat){ showToast('⚠ Vui lòng chọn danh mục!'); return; }
+  if(!price){ showToast('⚠ Vui lòng nhập đơn giá!'); return; }
+  const editId=parseInt(document.getElementById('editId').value)||0;
+  const data={name,cat,price,logo:document.getElementById('fLogo').value.trim()||'📦',plan:document.getElementById('fPlan').value.trim(),period:document.getElementById('fPeriod').value,unit:document.getElementById('fUnit').value,status:document.getElementById('fStatus').value};
+  if(editId){
+    const idx=PRODUCTS.findIndex(x=>x.id===editId);
+    if(idx>-1){ PRODUCTS[idx]={...PRODUCTS[idx],...data}; showToast('✦ Đã cập nhật "'+name+'"'); }
+  } else {
+    recalcNextId(); PRODUCTS.push({id:nextId++,...data,order:PRODUCTS.length}); quantities[nextId-1]=1;
+    showToast('✦ Đã thêm "'+name+'"');
+  }
+  persistOrder(); cancelEdit(); renderAdminList(); populateDetailPicker(); filterProducts();
+  switchAdminTab(document.querySelectorAll('.admin-tab')[0],'tabProducts');
+}
+
+
+const DETAIL = {
+  1:{desc:'Canva Pro gói tháng — linh hoạt, phù hợp dùng ngắn hạn. Tài khoản chính chủ, đăng nhập trực tiếp.',features:['Tài khoản riêng, không chia sẻ','Magic Studio AI — tạo ảnh, xóa nền tự động','100M+ ảnh, video, template premium','Brand Kit lưu màu sắc & font thương hiệu','Xuất file không giới hạn, không watermark'],note:'✦ Tài khoản kích hoạt ngay sau thanh toán.'},
+  2:{desc:'Canva Pro gói năm — tiết kiệm hơn 55% so với mua theo tháng. Tài khoản chính chủ, ổn định cả năm.',features:['Tài khoản riêng, không chia sẻ','Magic Studio AI — tạo ảnh, xóa nền tự động','100M+ ảnh, video, template premium','Brand Kit lưu màu sắc & font','Xuất file không giới hạn, không watermark'],note:'✦ Bảo hành đầy đủ 12 tháng.'},
+  3:{desc:'CapCut Pro chính chủ — AI xóa nền, tăng độ phân giải, tách giọng, subtitle tự động, kho nhạc bản quyền.',features:['AI xóa nền, tách giọng, subtitle tự động','Kho nhạc bản quyền 1M+ bài','Tăng độ phân giải video lên 4K','Export không watermark','Dùng trên điện thoại và máy tính'],note:'✦ Kích hoạt trong 15 phút sau thanh toán.'},
+  4:{desc:'Adobe Creative Cloud Full App — Photoshop, Illustrator, Premiere, After Effects và 20+ app chuyên nghiệp.',features:['Photoshop, Illustrator, Premiere Pro','After Effects, InDesign, Lightroom','20+ ứng dụng Adobe','100GB lưu trữ đám mây','Font Adobe, Stock trong gói'],note:'⚠ Tài khoản chia sẻ nhóm nhỏ. Không thay đổi mật khẩu.'},
+  5:{desc:'Figma Pro — thiết kế nhóm thời gian thực, prototype không giới hạn, thư viện component chuyên nghiệp.',features:['Không giới hạn project & team','Prototype tương tác nâng cao','Dev Mode — handoff cho lập trình viên','Thư viện component chia sẻ toàn team','Lịch sử phiên bản 180 ngày'],note:'✦ Tài khoản chính chủ. Phù hợp designer và team UI/UX.'},
+  6:{desc:'ChatGPT Plus chính chủ — GPT-4o, DALL·E 3, GPT Store, Advanced Data Analysis. Email đăng nhập riêng.',features:['GPT-4o nhanh hơn GPT-4 đến 2x','DALL·E 3 — tạo hình ảnh AI','Truy cập GPT Store','Advanced Data Analysis','Voice Mode — trò chuyện giọng nói'],note:'✦ Tài khoản fresh. Bảo hành 1 tháng.'},
+  7:{desc:'Claude Pro — AI viết lách, phân tích, lập trình bậc nhất. Claude Sonnet & Opus, Projects, upload file.',features:['Claude Sonnet 4 & Opus','Projects — lưu context dài hạn','Upload PDF, ảnh, code để phân tích','200K token context window','Ưu tiên truy cập khi cao điểm'],note:'✦ Phù hợp viết content, nghiên cứu, lập trình, dịch thuật.'},
+  8:{desc:'Gemini Advanced trong Google One AI — Gemini Ultra 1.0, kết nối Gmail, Docs, Drive, kèm 2TB lưu trữ.',features:['Gemini Ultra 1.0 — model cao nhất','Kết nối Gmail, Docs, Drive','2TB lưu trữ Google One','Tạo ảnh AI không giới hạn','Tích hợp hệ sinh thái Google'],note:'✦ Tài khoản chính chủ, đăng nhập Google trực tiếp.'},
+  9:{desc:'Midjourney Basic — tạo hình ảnh AI nghệ thuật, ~200 ảnh/tháng, phong cách phong phú từ realistic đến anime.',features:['~200 ảnh/tháng (fast hours)','Chất lượng hình ảnh hàng đầu','Phong cách: realistic, anime, artistic...','Upscale & variation không giới hạn','Truy cập Discord & web interface'],note:'✦ Tài khoản chính chủ. Ảnh thuộc sở hữu bạn.'},
+  10:{desc:'Grok AI Super — AI của xAI, cập nhật tin tức thời gian thực từ X/Twitter, tạo ảnh Aurora, phân tích dữ liệu.',features:['Cập nhật thông tin real-time từ X','Grok-2 model mạnh mẽ','Tạo hình ảnh AI Aurora','Phân tích tài liệu, code, dữ liệu','Không bị kiểm duyệt quá mức'],note:'✦ Phù hợp theo dõi tin tức, phân tích thị trường.'},
+  11:{desc:'Netflix Premium 4K slot chia sẻ — 4K Ultra HD + HDR, xem phim không quảng cáo, slot ổn định ít bị reset.',features:['4K Ultra HD + HDR + Dolby Atmos','Xem trên TV, điện thoại, máy tính','Tải phim xem offline','Nội dung phim series anime không giới hạn','Giao slot trong 15 phút'],note:'⚠ Slot chia sẻ. Không thay đổi profile. Hỗ trợ 24h nếu lỗi.'},
+  12:{desc:'Spotify Premium 6 tháng chính chủ — không quảng cáo, tải offline, 320kbps. Tài khoản riêng đăng nhập.',features:['Không quảng cáo','Tải về nghe offline không giới hạn','Chất lượng 320kbps','Dùng mọi thiết bị','Tài khoản chính chủ'],note:'✦ Không thay đổi email và mật khẩu gốc.'},
+  13:{desc:'Spotify Premium 1 năm chính chủ — tiết kiệm hơn gói 6 tháng, nghe nhạc không giới hạn cả năm.',features:['Không quảng cáo','Tải về nghe offline không giới hạn','Chất lượng 320kbps','Dùng mọi thiết bị','Bảo hành 12 tháng'],note:'✦ Kích hoạt trong ngày. Tiết kiệm so với 2 lần gói 6 tháng.'},
+  14:{desc:'YouTube Premium 6 tháng — không quảng cáo, tải offline, YouTube Music Premium, background play.',features:['Không quảng cáo trên YouTube','YouTube Music Premium','Tải video xem offline','Picture-in-Picture','Background play khi khóa màn hình'],note:'✦ Kích hoạt trên Gmail của bạn.'},
+  15:{desc:'YouTube Premium 1 năm — tận hưởng YouTube không quảng cáo cả năm, tiết kiệm hơn gói 6 tháng.',features:['Không quảng cáo trên YouTube','YouTube Music Premium','Tải video xem offline','Background play & PiP','Bảo hành 12 tháng'],note:'✦ Tiết kiệm 50.000đ so với 2 lần gói 6 tháng.'},
+  16:{desc:'VieON VIP, HBO, K+ All Access — phim Việt, phim bộ, bóng đá ngoại hạng. Giá liên hệ theo nhu cầu.',features:['VieON VIP — phim Việt, Hàn độc quyền','HBO — phim bom tấn Hollywood','K+ — bóng đá Ngoại hạng Anh, La Liga','Xem trên TV, điện thoại, máy tính','Giá tốt theo combo dịch vụ'],note:'✦ Liên hệ Zalo để tư vấn gói và báo giá chính xác.'},
+  17:{desc:'ClipTV Full 4 thiết bị — phim Việt, phim chiếu rạp, nội dung 4K. Dùng 4 thiết bị cùng lúc.',features:['4K Ultra HD','Dùng 4 thiết bị đồng thời','Phim Việt, Hàn, Mỹ độc quyền','Phim chiếu rạp mới nhất','Tải phim xem offline'],note:'✦ Tài khoản chính chủ.'},
+  18:{desc:'Duolingo Plus — học 30+ ngôn ngữ không quảng cáo, không giới hạn tim, AI gợi ý bài học phù hợp.',features:['30+ ngôn ngữ: Anh, Nhật, Hàn, Pháp...','Không quảng cáo','Không giới hạn số tim','Luyện bài học đã qua','Streak repair'],note:'✦ Tài khoản chính chủ. Đồng bộ trên mọi thiết bị.'},
+  19:{desc:'Grammarly Premium — kiểm tra ngữ pháp, sửa văn phong, phát hiện đạo văn, AI viết lại đoạn văn.',features:['Kiểm tra ngữ pháp & chính tả nâng cao','Gợi ý văn phong: formal, casual, academic','Phát hiện đạo văn','Tích hợp Word, Google Docs, trình duyệt','AI writing assistant'],note:'✦ Phù hợp sinh viên, người cần viết email/báo cáo tiếng Anh.'},
+  20:{desc:'Team Treehouse — học lập trình online với 1000+ khóa: Python, JS, iOS, Android, Data Science.',features:['1000+ khóa học lập trình','Python, JS, Swift, Kotlin, SQL...','Project thực tế kèm theo','Certificates được công nhận','Cộng đồng hỗ trợ 24/7'],note:'✦ Phù hợp người mới bắt đầu đến lập trình viên nâng cao.'},
+  21:{desc:'Lynda / LinkedIn Learning Premium — 16.000+ khóa học kinh doanh, thiết kế, lập trình, marketing từ chuyên gia.',features:['16.000+ khóa học chuyên nghiệp','Chứng chỉ hiện trên LinkedIn','Học offline','AI gợi ý khóa học','Cập nhật nội dung liên tục'],note:'✦ Phù hợp người muốn học thêm kỹ năng hoặc chuyển ngành.'},
+  22:{desc:'Quizlet Plus tháng — flashcard thông minh với AI, ôn thi, học từ vựng, ghi nhớ công thức.',features:['Flashcard không giới hạn','AI tạo flashcard từ tài liệu','Học không quảng cáo','Tải về học offline','Thống kê tiến độ học'],note:'✦ Phù hợp học sinh ôn thi IELTS, TOEIC.'},
+  23:{desc:'Quizlet Plus năm — tiết kiệm nhất cho học sinh sinh viên. Ôn thi cả năm không gián đoạn.',features:['Flashcard không giới hạn','AI tạo flashcard từ tài liệu','Học không quảng cáo','Tải về học offline','Tiết kiệm hơn gói tháng nhiều lần'],note:'✦ Tiết kiệm 360.000đ so với mua tháng liên tục.'},
+  24:{desc:'DataCamp Premium — học Data Science, ML, Python, R, SQL với bài thực hành trực tiếp trên trình duyệt.',features:['350+ khóa học Data Science & AI','Python, R, SQL, Power BI, Tableau','Bài tập thực hành trên trình duyệt','Projects với dữ liệu thật','Chứng chỉ DataCamp được công nhận'],note:'✦ Phù hợp Data Analyst, Data Scientist, người chuyển ngành Data.'},
+  25:{desc:'MYK+ 3 tháng — học tiếng Anh chuẩn người bản ngữ, đa dạng chủ đề, phương pháp hiện đại.',features:['Học theo chủ đề thực tế','Luyện nghe giọng bản ngữ','Bài tập tương tác đa dạng','Theo dõi tiến độ từng ngày','Phù hợp mọi trình độ'],note:'✦ Kích hoạt ngay. Học trên web và app điện thoại.'},
+  26:{desc:'Microsoft 365 cho 5 thiết bị — Word, Excel, PowerPoint, Teams và 1TB OneDrive trên PC, Mac, điện thoại.',features:['Word, Excel, PowerPoint bản mới nhất','1TB OneDrive','Dùng trên 5 thiết bị đồng thời','Teams for Personal','Cập nhật tự động'],note:'✦ Tài khoản Microsoft chính chủ.'},
+  27:{desc:'Office 365 + OneDrive 1TB — bộ ứng dụng văn phòng đầy đủ kèm 1TB lưu trữ đám mây.',features:['Word, Excel, PowerPoint, Outlook','1TB OneDrive lưu trữ','Đồng bộ trên mọi thiết bị','Teams, OneNote','Bảo hành 1 năm'],note:'✦ Tài khoản chính chủ, đăng nhập bằng email Microsoft.'},
+  28:{desc:'Google One / Gemini từ 200GB đến 2TB — lưu trữ Google dùng cho cả gia đình, Gemini Advanced kèm gói 2TB.',features:['200GB đến 2TB lưu trữ','Dùng chung Gmail, Photos, Drive','Chia sẻ với 5 thành viên gia đình','Gemini Advanced kèm gói 2TB','Google Photos backup gốc'],note:'✦ Liên hệ để báo giá theo dung lượng cần.'},
+  29:{desc:'Dropbox Plus 2TB — đồng bộ file tự động, chia sẻ dễ dàng, khôi phục file lên 1 năm.',features:['2TB lưu trữ','Đồng bộ tất cả thiết bị','Lịch sử phiên bản 1 năm','Khôi phục file đã xóa 180 ngày','Tích hợp Office, Zoom, Slack'],note:'✦ Phù hợp người lưu file dung lượng lớn, làm từ nhiều thiết bị.'},
+  30:{desc:'NordVPN Standard — 5000+ máy chủ tại 60+ quốc gia, bảo mật cao, tốc độ nhanh với NordLynx.',features:['5000+ máy chủ 60+ quốc gia','Tốc độ cao NordLynx protocol','6 kết nối đồng thời','No-logs policy','Kill Switch & Double VPN'],note:'✦ Phù hợp Netflix nước ngoài, bảo mật WiFi công cộng.'},
+  31:{desc:'ExpressVPN — 3000+ máy chủ 94 quốc gia, nhanh nhất thế giới với Lightway protocol.',features:['3000+ máy chủ 94 quốc gia','Tốc độ cực cao Lightway','5 kết nối đồng thời','RAM-only servers','Hỗ trợ router, Smart TV'],note:'✦ Liên hệ để nhận giá tốt nhất.'},
+  32:{desc:'Surfshark — không giới hạn thiết bị, 3200+ máy chủ, CleanWeb block quảng cáo, giá cực tốt.',features:['Không giới hạn thiết bị','3200+ máy chủ 100+ quốc gia','CleanWeb block quảng cáo & malware','MultiHop qua 2 server','Camouflage Mode'],note:'✦ Lý tưởng cho gia đình nhiều thiết bị.'},
+  33:{desc:'HMA VPN — 1000+ máy chủ tại 190+ quốc gia, nhiều địa điểm nhất, IP Shuffle đổi IP liên tục.',features:['190+ quốc gia nhiều nhất thế giới','IP Shuffle đổi IP tự động','5 kết nối đồng thời','Lightning Connect nhanh','Bypass geo-restriction tốt'],note:'✦ Liên hệ để tư vấn gói phù hợp.'},
+  34:{desc:'Zoom Pro tháng — họp không giới hạn thời gian, 100 người, ghi hình cloud 1GB. Hết cảnh bị cắt 40 phút.',features:['Họp không giới hạn thời gian','100 người tham gia','Ghi hình cloud 1GB','Lên lịch & invitation email','Báo cáo cuộc họp'],note:'✦ Phù hợp doanh nghiệp, giáo viên online, team từ xa.'},
+  35:{desc:'Zoom Pro 2 tháng — tiết kiệm hơn gói tháng, họp online không giới hạn cho team.',features:['Họp không giới hạn thời gian','100 người mỗi cuộc họp','Ghi hình cloud 1GB','Tích hợp Calendar, Slack','Breakout rooms chia nhóm'],note:'✦ Tiết kiệm hơn 2 lần mua gói tháng riêng.'},
+  36:{desc:'Kaspersky Premium — antivirus + VPN + password manager + bảo vệ thanh toán. Bảo mật toàn diện nhất.',features:['Antivirus thời gian thực','VPN không giới hạn băng thông','Password Manager','Bảo vệ thanh toán Safe Money','Kiểm soát nội dung trẻ em'],note:'✦ Top 1 antivirus 2024. Phù hợp cá nhân và gia đình.'},
+  37:{desc:'Key Windows 10 Pro bản quyền vĩnh viễn — kích hoạt một lần, update mãi, cài lại không mất key.',features:['Vĩnh viễn, dùng mãi','Update bảo mật từ Microsoft','Cài lại không mất bản quyền','Bitlocker, Remote Desktop','Nâng cấp lên Windows 11 Pro'],note:'✦ Giao key qua Zalo. Hỗ trợ kích hoạt miễn phí.'},
+  38:{desc:'Key Project 2019 Pro Plus bản quyền vĩnh viễn — quản lý dự án chuyên nghiệp với Microsoft Project.',features:['Bản quyền vĩnh viễn 1 máy','Gantt chart & timeline','Quản lý nguồn lực & ngân sách','Tích hợp Microsoft 365','Kích hoạt ngay sau nhận key'],note:'✦ Giao key qua Zalo. Hỗ trợ kích hoạt miễn phí.'},
+};
+
+
+let pdCurrentId = null;
+let pdActiveRow = null;
+
+function openDetail(e, id){
+  if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT') return;
+  e.stopPropagation();
+  pdCurrentId = id;
+  renderPD(id);
+  document.getElementById('pdDrawer').classList.add('open');
+  document.getElementById('pdBackdrop').classList.add('open');
+  document.body.classList.add('drawer-open');
+  // highlight row
+  if(pdActiveRow){ pdActiveRow.classList.remove('pd-active'); }
+  const row = document.getElementById('pdrow-'+id);
+  if(row){ row.classList.add('pd-active'); pdActiveRow=row; }
+}
+
+
+/* ── Per-product guide & warranty data ── */
+const GUIDE = {
+  default: ['Nhận thông tin tài khoản qua Zalo trong 15 phút sau thanh toán','Đăng nhập bằng email/mật khẩu shop cung cấp','Đổi ảnh đại diện tên hiển thị nếu muốn (không đổi email & mật khẩu)','Liên hệ shop ngay nếu gặp sự cố — hỗ trợ trong 24h'],
+  slot: ['Nhận link slot + hướng dẫn qua Zalo trong 15 phút','Chọn đúng profile được chỉ định, không dùng profile khác','Không thay đổi bất kỳ thông tin nào trong tài khoản','Nếu slot bị lỗi nhắn shop — được đổi slot mới miễn phí'],
+  key: ['Nhận key bản quyền qua Zalo ngay sau thanh toán','Mở Settings → Update & Security → Activation → Enter product key','Nhập key và chờ kích hoạt (cần kết nối internet)','Shop hỗ trợ kích hoạt từ xa miễn phí nếu gặp khó khăn'],
+  vpn: ['Tải ứng dụng VPN về máy hoặc điện thoại (tìm trên App Store/Google Play)','Nhập tài khoản shop cung cấp để đăng nhập','Chọn máy chủ phù hợp (US cho Netflix Mỹ, JP cho nội dung Nhật...)','Bật VPN trước khi mở ứng dụng cần dùng'],
+  ai: ['Nhận email + mật khẩu tài khoản qua Zalo trong 15 phút','Đăng nhập tại trang web chính thức của dịch vụ','Có thể đổi mật khẩu sau khi nhận — shop không lưu lại','Khuyến nghị bật xác thực 2 lớp để bảo mật tài khoản'],
+};
+
+const WARRANTY = {
+  default: [
+    {icon:'🛡️', title:'Thời gian bảo hành', desc:'Bảo hành đầy đủ trong suốt thời gian sử dụng gói đã mua'},
+    {icon:'🔄', title:'Điều kiện được bảo hành', desc:'Tài khoản bị lỗi do phía nhà cung cấp, không phải do người dùng thay đổi thông tin'},
+    {icon:'⚡', title:'Thời gian xử lý', desc:'Phản hồi trong 24h — ưu tiên xử lý trong giờ hành chính 8:00–22:00'},
+    {icon:'❌', title:'Không được bảo hành', desc:'Tự ý đổi email, mật khẩu, hoặc vi phạm điều khoản nhà cung cấp'},
+  ],
+  slot: [
+    {icon:'🛡️', title:'Bảo hành slot', desc:'Đổi slot mới miễn phí nếu slot bị reset hoặc không truy cập được'},
+    {icon:'⚡', title:'Thời gian xử lý', desc:'Đổi slot trong 2–4 giờ, thường nhanh hơn'},
+    {icon:'🔄', title:'Số lần đổi', desc:'Không giới hạn số lần đổi slot trong thời hạn sử dụng'},
+    {icon:'❌', title:'Không bảo hành', desc:'Slot bị khóa do người dùng vi phạm: thay đổi profile, thêm thiết bị ngoài quy định'},
+  ],
+  key: [
+    {icon:'🛡️', title:'Bảo hành key', desc:'Key lỗi, không kích hoạt được — đổi key mới hoàn toàn miễn phí'},
+    {icon:'⚡', title:'Thời gian xử lý', desc:'Đổi key trong vòng 1 giờ làm việc'},
+    {icon:'♾️', title:'Vĩnh viễn', desc:'Key bản quyền một lần, dùng mãi mãi, cài lại không mất'},
+    {icon:'❌', title:'Không bảo hành', desc:'Key đã kích hoạt thành công sau đó bị lỗi do format máy, can thiệp phần mềm'},
+  ],
+};
+
+function getGuideKey(p){
+  if(['🎬','📺','🎥'].includes(p.logo)) return 'slot';
+  if(['🔒','🔐','🦈','🔓'].includes(p.logo)) return 'vpn';
+  if(['🪟','📊'].includes(p.logo)) return 'key';
+  if(['🤖','✨','🌟','🎯','🔮'].includes(p.logo)) return 'ai';
+  return 'default';
+}
+function getWarrantyKey(p){
+  if(['🎬','📺','🎥'].includes(p.logo)) return 'slot';
+  if(['🪟','📊'].includes(p.logo)) return 'key';
+  return 'default';
+}
+
+function renderPD(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  const d = DETAIL[id] || {desc:'Liên hệ shop để biết thêm chi tiết.',features:[],note:''};
+  if(!p) return;
+  document.getElementById('pdLogo').textContent = p.logo;
+  document.getElementById('pdName').textContent = p.name;
+  document.getElementById('pdPlanSub').textContent = p.plan + (p.period?' · '+p.period:'');
+  document.getElementById('pdCat').textContent = p.cat;
+  const statusEl = document.getElementById('pdStatus');
+  if(p.status==='Có sẵn'){statusEl.textContent='✓ Có sẵn';statusEl.className='pd-d-pill pd-d-pill-green';}
+  else if(p.status==='Hết hàng'){statusEl.textContent='✗ Hết hàng';statusEl.className='pd-d-pill pd-d-pill-red';}
+  else{statusEl.textContent='? Liên hệ';statusEl.className='pd-d-pill pd-d-pill-orange';}
+
+  document.getElementById('pdDesc').textContent = d.desc;
+
+  const variants = PRODUCTS.filter(x=>x.name===p.name && x.cat===p.cat);
+  if(variants.length>1){
+    document.getElementById('pdPrices').innerHTML = variants.map((v,i)=>
+      `<div class="pd-d-price-opt ${v.id===id?'sel':''}" onclick="pdSelectVariant(this,${v.id})">
+        <div><div class="pov-period">${v.period||'Vĩnh viễn'}</div><div class="pov-unit">/${v.unit}</div></div>
+        <div style="text-align:right"><div class="pov-price">${v.price.toLocaleString('vi-VN')}đ</div>${i>0?'<div class="pov-save">Tiết kiệm hơn</div>':''}</div>
+      </div>`
+    ).join('');
+  } else {
+    document.getElementById('pdPrices').innerHTML =
+      `<div class="pd-d-price-opt sel">
+        <div><div class="pov-period">${p.period||'Vĩnh viễn'}</div><div class="pov-unit">/${p.unit}</div></div>
+        <div><div class="pov-price">${p.price.toLocaleString('vi-VN')}đ</div></div>
+      </div>`;
+  }
+
+  document.getElementById('pdFeatures').innerHTML = d.features.map(f=>
+    `<div class="pd-d-feat"><div class="pd-d-check">✓</div><div class="pd-d-feat-text">${f}</div></div>`
+  ).join('');
+  document.getElementById('pdNote').textContent = d.note;
+
+  // guide & warranty
+  const gKey = getGuideKey(p);
+  const wKey = getWarrantyKey(p);
+  const guideSteps = (d.guide && d.guide.length ? d.guide : (GUIDE[gKey] || GUIDE.default));
+  const warrantyItems = (d.warranty && d.warranty.length ? d.warranty : (WARRANTY[wKey] || WARRANTY.default));
+  document.getElementById('pdGuide').innerHTML = guideSteps.map((s,i)=>
+    `<div class="pd-d-guide-item"><div class="pd-d-guide-num">${i+1}</div><div class="pd-d-guide-text">${s}</div></div>`
+  ).join('');
+  document.getElementById('pdWarranty').innerHTML = warrantyItems.map(w=>
+    `<div class="pd-d-warranty-item"><div class="pd-d-warranty-icon">${w.icon}</div><div class="pd-d-warranty-text"><strong>${w.title}</strong>${w.desc}</div></div>`
+  ).join('');
+
+  // nav btns - navigate through visible products
+  const visible = getFiltered();
+  const idx = visible.findIndex(x=>x.id===id);
+  document.getElementById('pdBtnPrev').disabled = idx<=0;
+  document.getElementById('pdBtnNext').disabled = idx>=visible.length-1;
+
+  document.getElementById('pdDrawerBody').scrollTop = 0;
+}
+
+function pdSelectVariant(el, id){
+  document.querySelectorAll('.pd-d-price-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  const variant=PRODUCTS.find(x=>x.id===id);
+  const group=getDisplayProducts(PRODUCTS).find(p=>variant&&variantKey(p)===variantKey(variant))||variant;
+  if(group&&variant){ selectedVariants[group.id]=variant.id; pdCurrentId=group.id; }
+  if(pdActiveRow) pdActiveRow.classList.remove('pd-active');
+  const row = document.getElementById('pdrow-'+(group?group.id:id));
+  if(row){ row.classList.add('pd-active'); pdActiveRow=row; }
+}
+
+function pdNav(dir){
+  const visible = getFiltered();
+  const idx = visible.findIndex(x=>x.id===pdCurrentId);
+  const newIdx = idx+dir;
+  if(newIdx<0||newIdx>=visible.length) return;
+  const newId = visible[newIdx].id;
+  pdCurrentId = newId;
+  renderPD(newId);
+  if(pdActiveRow) pdActiveRow.classList.remove('pd-active');
+  const row = document.getElementById('pdrow-'+newId);
+  if(row){ row.classList.add('pd-active'); pdActiveRow=row; }
+}
+
+function closePD(){
+  document.getElementById('pdDrawer').classList.remove('open');
+  document.getElementById('pdBackdrop').classList.remove('open');
+  document.body.classList.remove('drawer-open');
+  if(pdActiveRow){ pdActiveRow.classList.remove('pd-active'); pdActiveRow=null; }
+  pdCurrentId=null;
+}
+
+function pdContact(){ navigator.clipboard.writeText('0389896683').catch(()=>{}); showToast('✦ Đã copy Zalo: 0389 896 683'); }
+function pdAddCart(){
+  const p=PRODUCTS.find(x=>x.id===pdCurrentId);
+  if(!p) return;
+  const v=getChosenVariant(p);
+  if(!selectedIds.has(p.id)){ toggleCheck(p.id); }
+  showToast('Da them: '+p.name+' - '+variantLabel(v)+' vao gio!');
+}
+
+renderRows(PRODUCTS);
+
+/* ── Swipe down to close (mobile bottom sheet) ── */
+(function(){
+  const drawer = document.getElementById('pdDrawer');
+  const handle = document.getElementById('pdDragHandle');
+  if(!handle) return;
+  let startY = 0, currentY = 0, dragging = false;
+  function isMobile(){ return window.innerWidth <= 768; }
+
+  function onStart(e){
+    if(!isMobile()) return;
+    dragging = true;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    currentY = startY;
+    drawer.style.transition = 'none';
+  }
+  function onMove(e){
+    if(!dragging||!isMobile()) return;
+    currentY = e.touches ? e.touches[0].clientY : e.clientY;
+    const dy = Math.max(0, currentY - startY);
+    drawer.style.transform = `translateY(${dy}px)`;
+  }
+  function onEnd(e){
+    if(!dragging||!isMobile()) return;
+    dragging = false;
+    drawer.style.transition = 'transform .32s cubic-bezier(.4,0,.2,1)';
+    const dy = currentY - startY;
+    if(dy > 80){ closePD(); drawer.style.transform = ''; }
+    else { drawer.style.transform = drawer.classList.contains('open') ? 'translateY(0)' : 'translateY(100%)'; }
+  }
+
+  handle.addEventListener('touchstart', onStart, {passive:true});
+  drawer.querySelector('.pd-d-body').addEventListener('touchstart', function(e){
+    if(this.scrollTop === 0) onStart(e);
+  }, {passive:true});
+  window.addEventListener('touchmove', onMove, {passive:true});
+  window.addEventListener('touchend', onEnd, {passive:true});
+})();
+
+
+/* ===== DETAIL CONTENT EDITOR ===== */
+
+// Load saved detail overrides from localStorage
+function loadDetailOverrides(){
+  try{
+    const saved = localStorage.getItem('ctn_detail');
+    if(saved){ const overrides=JSON.parse(saved); Object.assign(DETAIL,overrides); }
+  }catch(e){}
+}
+function saveDetailOverrides(){
+  try{
+    // Save only the ids that exist in DETAIL
+    const toSave={};
+    PRODUCTS.forEach(p=>{ if(DETAIL[p.id]) toSave[p.id]=DETAIL[p.id]; });
+    localStorage.setItem('ctn_detail', JSON.stringify(toSave));
+  }catch(e){}
+}
+loadDetailOverrides();
+
+function populateDetailPicker(){
+  const sel = document.getElementById('detailPickProduct');
+  sel.innerHTML = '<option value="">-- Chọn sản phẩm --</option>';
+  sortProductsForDisplay(PRODUCTS).forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.logo+' '+p.name+' — '+p.plan+(p.period?' ('+p.period+')':'');
+    sel.appendChild(opt);
+  });
+}
+
+function loadDetailForm(id){
+  id = parseInt(id);
+  if(!id){ document.getElementById('detailFormFields').style.display='none'; return; }
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const d = DETAIL[id] || {desc:'',features:[],note:''};
+
+  document.getElementById('detailEditId').value = id;
+  document.getElementById('dDesc').value = d.desc || '';
+  document.getElementById('dNote').value = d.note || '';
+
+  // features
+  renderDetailItems('dFeatures', d.features||[]);
+
+  // guide — get from GUIDE using getGuideKey
+  const gKey = getGuideKey(p);
+  const guideSteps = (DETAIL[id]&&DETAIL[id].guide) || GUIDE[gKey] || GUIDE.default;
+  renderDetailItems('dGuide', guideSteps);
+
+  // warranty
+  const wKey = getWarrantyKey(p);
+  const warrantyItems = (DETAIL[id]&&DETAIL[id].warranty) || WARRANTY[wKey] || WARRANTY.default;
+  renderWarrantyItems(warrantyItems);
+
+  document.getElementById('detailFormFields').style.display = 'block';
+}
+
+function renderDetailItems(containerId, items){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  items.forEach((item,i)=>{
+    container.appendChild(makeDetailItemRow(containerId, item, i+1));
+  });
+}
+
+function makeDetailItemRow(containerId, text, num){
+  const row = document.createElement('div');
+  row.className = 'detail-item-row';
+  row.innerHTML = `
+    <div class="detail-item-num">${num}</div>
+    <input type="text" value="${text.replace(/"/g,'&quot;')}" placeholder="Nhập nội dung...">
+    <button class="btn-del-item" onclick="this.closest('.detail-item-row').remove();renumberItems('${containerId}')">✕</button>
+  `;
+  return row;
+}
+
+function addDetailItem(containerId){
+  const container = document.getElementById(containerId);
+  const count = container.querySelectorAll('.detail-item-row').length + 1;
+  container.appendChild(makeDetailItemRow(containerId, '', count));
+  container.lastChild.querySelector('input').focus();
+}
+
+function renumberItems(containerId){
+  const rows = document.getElementById(containerId).querySelectorAll('.detail-item-row');
+  rows.forEach((row,i)=>{ const num=row.querySelector('.detail-item-num'); if(num) num.textContent=i+1; });
+}
+
+const WARRANTY_EMOJIS = ['🛡️','🔄','⚡','❌','✅','📋','⚠️','🔧','♾️','💬'];
+
+function renderWarrantyItems(items){
+  const container = document.getElementById('dWarranty');
+  container.innerHTML = '';
+  items.forEach(w=>{ container.appendChild(makeWarrantyItemGroup(w)); });
+}
+
+function makeWarrantyItemGroup(w){
+  const div = document.createElement('div');
+  div.className = 'warranty-item-group';
+  const pickedEmoji = w.icon||'🛡️';
+  const emojiPicker = WARRANTY_EMOJIS.map(e=>
+    `<button type="button" class="emoji-btn${e===pickedEmoji?' picked':''}" onclick="pickWarrantyEmoji(this,'${e}')">${e}</button>`
+  ).join('');
+  div.innerHTML = `
+    <button class="btn-del-item" onclick="this.closest('.warranty-item-group').remove()">✕</button>
+    <div class="warranty-row-label">Icon</div>
+    <div class="warranty-emoji-pick">${emojiPicker}</div>
+    <div class="warranty-row-label">Tiêu đề</div>
+    <input type="text" class="warranty-title" value="${(w.title||'').replace(/"/g,'&quot;')}" placeholder="VD: Thời gian bảo hành" style="width:100%;border:2px solid var(--ink);padding:6px 10px;font-family:'Oswald',sans-serif;font-size:12.5px;background:var(--cream);color:var(--ink);outline:none;border-radius:0;margin-bottom:4px;letter-spacing:.04em;">
+    <div class="warranty-row-label">Mô tả</div>
+    <input type="text" class="warranty-desc" value="${(w.desc||'').replace(/"/g,'&quot;')}" placeholder="VD: Bảo hành đầy đủ trong thời gian sử dụng" style="width:100%;border:2px solid var(--ink);padding:6px 10px;font-family:'Lora',serif;font-size:13px;background:var(--cream);color:var(--ink);outline:none;border-radius:0;">
+  `;
+  return div;
+}
+
+function addWarrantyItem(){
+  document.getElementById('dWarranty').appendChild(
+    makeWarrantyItemGroup({icon:'🛡️',title:'',desc:''})
+  );
+}
+
+function pickWarrantyEmoji(btn, emoji){
+  btn.closest('.warranty-emoji-pick').querySelectorAll('.emoji-btn').forEach(b=>b.classList.remove('picked'));
+  btn.classList.add('picked');
+}
+
+function saveDetailContent(){
+  const id = parseInt(document.getElementById('detailEditId').value);
+  if(!id){ showToast('⚠ Chưa chọn sản phẩm!'); return; }
+
+  const desc = document.getElementById('dDesc').value.trim();
+  const note = document.getElementById('dNote').value.trim();
+
+  const features = [...document.getElementById('dFeatures').querySelectorAll('.detail-item-row input')]
+    .map(i=>i.value.trim()).filter(Boolean);
+  const guide = [...document.getElementById('dGuide').querySelectorAll('.detail-item-row input')]
+    .map(i=>i.value.trim()).filter(Boolean);
+  const warranty = [...document.getElementById('dWarranty').querySelectorAll('.warranty-item-group')].map(g=>({
+    icon: g.querySelector('.emoji-btn.picked')?.textContent || '🛡️',
+    title: g.querySelector('.warranty-title')?.value.trim() || '',
+    desc: g.querySelector('.warranty-desc')?.value.trim() || '',
+  })).filter(w=>w.title||w.desc);
+
+  if(!DETAIL[id]) DETAIL[id] = {};
+  DETAIL[id].desc = desc;
+  DETAIL[id].note = note;
+  DETAIL[id].features = features;
+  DETAIL[id].guide = guide;
+  DETAIL[id].warranty = warranty;
+
+  saveDetailOverrides();
+  showToast('✦ Đã lưu nội dung chi tiết cho sản phẩm này!');
+}
+
+function resetDetailForm(){
+  document.getElementById('detailPickProduct').value = '';
+  document.getElementById('detailFormFields').style.display = 'none';
+}
+
+// Detail picker hooks are inline below
+
+/* ── Keyboard shortcuts ── */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){ closePD(); closeAdmin(); }
+  if(e.key === 'ArrowLeft') pdNav(-1);
+  if(e.key === 'ArrowRight') pdNav(1);
+});
+
+/* ── Swipe down to close (mobile bottom sheet) ── */
+(function(){
+  var drawer = document.getElementById('pdDrawer');
+  var handle = document.getElementById('pdDragHandle');
+  if(!handle || !drawer) return;
+  var startY=0, currentY=0, dragging=false;
+  function isMobile(){ return window.innerWidth<=768; }
+  function onStart(e){
+    if(!isMobile()) return;
+    dragging=true;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    currentY=startY;
+    drawer.style.transition='none';
+  }
+  function onMove(e){
+    if(!dragging||!isMobile()) return;
+    currentY = e.touches ? e.touches[0].clientY : e.clientY;
+    var dy=Math.max(0,currentY-startY);
+    drawer.style.transform='translateY('+dy+'px)';
+  }
+  function onEnd(){
+    if(!dragging||!isMobile()) return;
+    dragging=false;
+    drawer.style.transition='transform .32s cubic-bezier(.4,0,.2,1)';
+    var dy=currentY-startY;
+    if(dy>80){ closePD(); drawer.style.transform=''; }
+    else { drawer.style.transform=drawer.classList.contains('open')?'translateY(0)':'translateY(100%)'; }
+  }
+  handle.addEventListener('touchstart',onStart,{passive:true});
+  var body=drawer.querySelector('.pd-d-body');
+  if(body) body.addEventListener('touchstart',function(e){ if(this.scrollTop===0) onStart(e); },{passive:true});
+  window.addEventListener('touchmove',onMove,{passive:true});
+  window.addEventListener('touchend',onEnd,{passive:true});
+})();
+
+</script>
+</body>
+</html>
