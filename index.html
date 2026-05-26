@@ -1689,10 +1689,21 @@ const DEFAULT_PRODUCTS = [
 ];
 
 function loadProducts(){
-  try{ const s=localStorage.getItem('ctn_products'); if(s) return JSON.parse(s); }catch(e){}
+  const source = JSON.stringify(DEFAULT_PRODUCTS);
+  try{
+    const savedSource = localStorage.getItem('ctn_products_source');
+    const savedProducts = localStorage.getItem('ctn_products');
+    if(savedProducts && savedSource === source) return JSON.parse(savedProducts);
+    localStorage.setItem('ctn_products_source', source);
+  }catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
 }
-function saveProductsLS(){ try{localStorage.setItem('ctn_products',JSON.stringify(PRODUCTS));}catch(e){} }
+function saveProductsLS(){
+  try{
+    localStorage.setItem('ctn_products',JSON.stringify(PRODUCTS));
+    localStorage.setItem('ctn_products_source',JSON.stringify(DEFAULT_PRODUCTS));
+  }catch(e){}
+}
 
 let PRODUCTS=loadProducts();
 let quantities={}, selectedIds=new Set(), selectedVariants={}, activeCat='', nextId=0;
